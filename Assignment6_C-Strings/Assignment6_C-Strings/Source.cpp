@@ -1,8 +1,11 @@
 #include <iostream>
 #include <cstring>
-#include <iomanip> // used to manipulate cout
+#include <iomanip> 
+#include <regex>  
 
 using namespace std;
+
+//Functions
 int findW(char[], int);
 long getCustNum(char[], int);
 int getYear(char[], int);
@@ -13,28 +16,29 @@ void getWorkOrder(char[],int);
 int main() {
 	//Variables
 	const int SIZE = 20; //Char Array Size
-	char custNumber[6], year[2], workOrderNumber[5]; //Data to be parse from workOrder string
 	char workOrder[SIZE] ; //String to parse
 	int orderLen;  //Number of char in work order
 	int wPosition; //Position of w char in string
 	
 
-	getWorkOrder();
+	getWorkOrder(workOrder,SIZE);
 
-	//Get length of string and find position of 'W'.  Critical for all other fucntions
+	//Get length of string and find position of 'W'.  Critical for all other functions
 	orderLen = strlen(workOrder);
 	wPosition = findW(workOrder, orderLen);
 	if (wPosition == -1 ) { //if w not found or custnumber > 6 , invalid work order
 		cout << "Invalid work order. Exiting program" << endl;
+		cin.clear();
+		cin.get();
 		return 1;
 	}
 	
 
 
 	//Print Output
-	cout << "Order Length: " << orderLen << endl;
+	cout << endl << "Order Length: " << orderLen << endl;
 	cout  << "W Position: " << wPosition << endl;
-	cout << "Customer Number: " << getCustNum(workOrder, wPosition); << endl;;
+	cout << "Customer Number: " << getCustNum(workOrder, wPosition) << endl;;
 	cout << "Year: " << getYear(workOrder,wPosition) << endl;;
 	cout << "Order Number: " << getOrderNum(workOrder, wPosition,orderLen) << endl;;
 		   	 	
@@ -42,7 +46,7 @@ int main() {
 
 	//pauses program
 	cout << "Press enter key to exit program\n";
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cin.clear();
 	cin.get();
 	return 0;
 }
@@ -113,7 +117,9 @@ long getOrderNum(char workOrder[], int wPosition,int orderLen) {
 
 
 void getWorkOrder(char workOrder[],int size) {
-
+	regex orderRegEx("^\\d{5,6}w\\d{2}\\d{4}$", regex_constants::icase|regex_constants::ECMAScript); //Regex pattern to validate work order input
+	
+	cin.clear();
 	bool isValid = false;
 	do {
 
@@ -122,15 +128,16 @@ void getWorkOrder(char workOrder[],int size) {
 		cout << "The first 2 digits after the W rrepresent the year\n";
 		cout << "The remaining digits represent the work order number\n";
 		cout << "Example: 123456w991234\n\n";
-
+		cout << "Enter Work Order: ";
 
 
 		cin.getline(workOrder, size);
-		if (cin.fail())
+
+		if (cin.fail() || !regex_match(workOrder, orderRegEx))
 		{
 			cin.clear();
-			cin.ignore();
-			cout << "You have entered invalid input.  Try again" << endl;
+			//cin.ignore();
+			cout << "\nYou have entered invalid input.  Try again" << endl;
 
 		}
 		else
