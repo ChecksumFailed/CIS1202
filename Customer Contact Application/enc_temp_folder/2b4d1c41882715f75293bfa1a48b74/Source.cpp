@@ -28,7 +28,7 @@ Customer getCustomer(); //Recives user input and creates new customer object
 void showCustomer(Customer); //Prints out all information for customer object
 Address getAddress(); // Get user input and create Address object
 void findCust(Customer[], int);// searches array for customer and prints results
-
+void expandArray(Customer[],int,int &); //double size of customer array if we hit limit.
 
 /*
 Programmer Name: Ben Scherer
@@ -38,10 +38,11 @@ Date : 9/24/2018
 Program Description : Stores contact details for customers leveraging structs.
 */
 int main() {
-	Customer customerArr[20];
+	
 	int arrSize = 0;
 	int maxSize = 1;
 	int choice; //stores user input
+	Customer* customerArr = new Customer[maxSize];
 
 
 
@@ -118,6 +119,29 @@ int displayMenu() {
 
 }
 
+/*
+Purpose : Expands customer array to size * 2
+Input Parameters : 
+	int size = number of elements in current array
+I/O Parameters : 
+	Customer customerArr[] - array of customer objects
+Output Parameters : 
+	int i - counter for loop
+Function Return Value: n/a
+*/
+void expandArray(Customer customerArr[],int size, int &max) {
+
+	max = max * 2;
+	Customer* tmpArr = new Customer[max]; // double size of array
+	//copy contents to tmp array
+	for (int i = 0; i < size; i++) {
+		tmpArr[i] = customerArr[i];
+	}
+
+	delete[] customerArr; //Delete old array from memory
+
+	customerArr = tmpArr; //point to new array.
+}
 
 /*
 Purpose : Prompts and validates user input to add a customer
