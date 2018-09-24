@@ -1,6 +1,7 @@
 #include <iostream> //cout
 #include <iomanip> // used to manipulate cout
 #include <string>
+#include <istream>
 
 using namespace std;
 
@@ -27,7 +28,7 @@ Customer getCustomer(); //Recives user input and creates new customer object
 void showCustomer(Customer); //Prints out all information for customer object
 Address getAddress(); // Get user input and create Address object
 void findCust(Customer[], int);// searches array for customer and prints results
-void expandArray(Customer[]);
+void expandArray(Customer[],int,int &); //double size of customer array if we hit limit.
 
 /*
 Programmer Name: Ben Scherer
@@ -38,7 +39,8 @@ Program Description : Stores contact details for customers leveraging structs.
 */
 int main() {
 	Customer customerArr[1];
-	int arrSize;
+	int arrSize = 0;
+	int maxSize = 1;
 	int choice; //stores user input
 
 
@@ -49,7 +51,11 @@ int main() {
 
 		switch (choice) {
 		case 1:
-			//enterRents(&rent[0], arrSize);
+			
+			if (arrSize >= maxSize)
+				expandArray(customerArr, arrSize,maxSize);
+			customerArr[arrSize] = getCustomer();
+			arrSize++;
 			break;
 		case 2:
 		//	displayRents(&rent[0], arrSize);
@@ -110,8 +116,17 @@ int displayMenu() {
 
 }
 
-
-void expandArray(Customer customerArr[],int size) {
+/*
+Purpose : Expands customer array to size * 2
+Input Parameters : 
+	int size = number of elements in current array
+I/O Parameters : 
+	Customer customerArr[] - array of customer objects
+Output Parameters : 
+	int i - counter for loop
+Function Return Value: n/a
+*/
+void expandArray(Customer customerArr[],int size, int &max) {
 
 	Customer* tmpArr = new Customer[size * 2]; // double size of array
 	//copy contents to tmp array
@@ -123,3 +138,53 @@ void expandArray(Customer customerArr[],int size) {
 
 	customerArr = tmpArr; //point to new array.
 }
+
+/*
+Purpose : Prompts and validates user input to add a customer
+Input Parameters : n/a
+I/O Parameters : n/a
+Output Parameters : 
+	Customer tmpCust - temporary customer object to store input values
+Function Return Value: Customer object
+*/
+Customer getCustomer() {
+	Customer tmpCust;
+	cout << "\nEnter customer first name: ";
+	getline(cin,tmpCust.firstNm);
+
+	cout << "\nEnter customer last name;";
+	getline(cin, tmpCust.lastNm);
+
+	cout << "\n\nEnter Business Address\n";
+	cout << "Enter street address: ";
+	getline(cin, tmpCust.busAddr.street);
+	cout << "\nEnter city:";
+	getline(cin, tmpCust.busAddr.city);
+	cout << "\nEnter State:";
+	getline(cin, tmpCust.busAddr.state);
+	cout << "\nEnter zip code:";
+	getline(cin, tmpCust.busAddr.zip);
+
+
+	cout << "\n\nEnter Home Address\n";
+	cout << "Enter street address: ";
+	getline(cin, tmpCust.homeAddr.street);
+	cout << "\nEnter city:";
+	getline(cin, tmpCust.homeAddr.city);
+	cout << "\nEnter State:";
+	getline(cin, tmpCust.homeAddr.state);
+	cout << "\nEnter zip code:";
+	getline(cin, tmpCust.homeAddr.zip);
+
+
+	return tmpCust;
+}
+
+
+/*
+Purpose : One sentence describing WHAT it does
+Input Parameters : Description of value parameters; sent into the function, but not changed by the function
+I/O Parameters : Description of reference parameters that have one value upon entering the routine and different value upon leaving the routine
+Output Parameters : Description of reference parameters that receive their initial value inside the function
+Function Return Value: (for non-void functions) Description of any value returned by the function
+*/
