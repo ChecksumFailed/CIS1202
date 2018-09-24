@@ -6,11 +6,11 @@
 using namespace std;
 
 //Functions
-int findW(char[], int);
-long getCustNum(char[], int);
-int getYear(char[], int);
-long getOrderNum(char[], int, int);
-void getWorkOrder(char[],int);
+int findW(char[], int); //finds and returns index of w in char array
+long getCustNum(char[], int); //parses and returns customer number from char array
+int getYear(char[], int); //parses and returns year from char array
+long getOrderNum(char[], int, int); //parses and returns order number from char array
+void getWorkOrder(char[],int); //gets user input and validates work order
 
 
 int main() {
@@ -27,7 +27,7 @@ int main() {
 	orderLen = strlen(workOrder);
 	wPosition = findW(workOrder, orderLen);
 	if (wPosition == -1 ) { //if w not found or custnumber > 6 , invalid work order
-		cout << "Invalid work order. Exiting program" << endl;
+		cout << "\nERROR: Invalid work order. Exiting program" << endl;
 		cin.clear();
 		cin.get();
 		return 1;
@@ -45,13 +45,22 @@ int main() {
 
 
 	//pauses program
-	cout << "Press enter key to exit program\n";
+	cout << "\nPress enter key to exit program\n";
 	cin.clear();
 	cin.get();
 	return 0;
 }
 
-
+/*
+Purpose : Finds the position of the letter "w" in the char array and returns its index
+Input Parameters : 
+	char WorkOrder[] - Char array containing work order
+	int size - Size of char array
+I/O Parameters : n/a
+Output Parameters :
+	int i = counter for loop
+Function Return Value: int, position of w in array
+*/
 int findW(char workOrder[], int size) {
 
 	for (int i = 0; i < size; i++) {
@@ -64,6 +73,18 @@ int findW(char workOrder[], int size) {
 
 }
 
+/*
+Purpose : Parses customer number from workOrder char array
+Input Parameters :
+	char WorkOrder[] - Char array containing work order
+	int wPosition - index of w in char array
+I/O Parameters : n/a
+Output Parameters :
+	int i = counter for loop
+	char* custNumber = temporary place holder for customer number
+	long numToReturn = holds custNumber after being converted to long
+Function Return Value: long numToReturn - Customer number after being converted from c-string to long
+*/
 long getCustNum(char workOrder[],int wPosition) {
 	
 	//Set array size to wPosition.  Allow for any size customer number
@@ -82,7 +103,17 @@ long getCustNum(char workOrder[],int wPosition) {
 	return numToReturn;
 	}
 
-
+/*
+Purpose : Parses year from workOrder char array
+Input Parameters :
+	char WorkOrder[] - Char array containing work order
+	int wPosition - index of w in char array
+I/O Parameters : n/a
+Output Parameters :
+	int i = counter for loop
+	char* year = temporary place holder for year
+Function Return Value: int - year converted from c-string to int
+*/
 int getYear(char workOrder[], int wPosition) {
 
 	char year[2];
@@ -94,7 +125,19 @@ int getYear(char workOrder[], int wPosition) {
 	return atoi(year); //convert char array to int and return
 }
 
-
+/*
+Purpose : Parses order number from workOrder char array
+Input Parameters :
+	char WorkOrder[] - Char array containing work order
+	int wPosition - index of w in char array
+	int orderLen - size of array
+I/O Parameters : n/a
+Output Parameters :
+	int i = counter for loop
+	char* orderNum = temporary place holder for customer number
+	long numToReturn = holds Order Number after being converted to long
+Function Return Value: long numToReturn - Order number after being converted from c-string to long
+*/
 long getOrderNum(char workOrder[], int wPosition,int orderLen) {
 	
 	int start = wPosition + 3; // Start position is wPostion + 1 + 2(year length)
@@ -115,7 +158,18 @@ long getOrderNum(char workOrder[], int wPosition,int orderLen) {
 	return numToReturn;
 }
 
-
+/*
+Purpose : retreives and validates input for work order
+Input Parameters :
+	int size - Size of char array
+I/O Parameters : 
+	char WorkOrder[] - Char array containing work order
+Output Parameters :
+	int i = counter for loop
+	char* custNumber = temporary place holder for customer number
+	long numToReturn = holds custNumber after being converted to long
+Function Return Value: n/a
+*/
 void getWorkOrder(char workOrder[],int size) {
 	regex orderRegEx("^\\d{5,6}w\\d{2}\\d{4}$", regex_constants::icase|regex_constants::ECMAScript); //Regex pattern to validate work order input
 	
