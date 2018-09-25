@@ -40,7 +40,6 @@ Program Description : Stores contact details for customers leveraging structs.
 int main() {
 	Customer customerArr[20];
 	int arrSize = 0;
-	int maxSize = 1;
 	int choice; //stores user input
 
 
@@ -51,9 +50,6 @@ int main() {
 
 		switch (choice) {
 		case 1:
-			
-			if (arrSize >= maxSize)
-				expandArray(customerArr, arrSize,maxSize);
 			customerArr[arrSize] = getCustomer();
 			arrSize++;
 			break;
