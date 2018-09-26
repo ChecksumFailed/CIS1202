@@ -63,9 +63,6 @@ int main() {
 		case 3:
 			findCust(customerArr, arrSize);
 			break;
-		case 4:
-		//	cout << "Total Rent: $" << sumRents(&rent[0], arrSize) << endl;
-			break;
 	
 		default:
 			cout << "ERROR: Invalid Choice.  Try Again\n\n";
