@@ -2,6 +2,7 @@
 #include <iomanip> // used to manipulate cout
 #include <string>
 #include <istream>
+#include <cstring>
 
 using namespace std;
 
@@ -28,6 +29,7 @@ Customer getCustomer(); //Recives user input and creates new customer object
 void showCustomer(Customer); //Prints out all information for customer object
 Address getAddress(); // Get user input and create Address object
 void findCust(Customer[], int);// searches array for customer and prints results
+string strToUpper(string s);
 
 
 /*
@@ -59,7 +61,7 @@ int main() {
 			}
 			break;
 		case 3:
-			//selectionSort(rent, arrSize);
+			findCust(customerArr, arrSize);
 			break;
 		case 4:
 		//	cout << "Total Rent: $" << sumRents(&rent[0], arrSize) << endl;
@@ -124,9 +126,11 @@ Output Parameters :
 Function Return Value: Customer object
 */
 Customer getCustomer() {
-	Customer tmpCust;
+	Customer tmpCust; //temporary var to holder customer
+	//clear cin
 	cin.clear();
 	cin.ignore();
+
 	cout << "\nEnter customer first name: ";
 	getline(cin,tmpCust.firstNm);
 
@@ -134,30 +138,35 @@ Customer getCustomer() {
 	getline(cin, tmpCust.lastNm);
 
 	cout << "\n\nEnter Business Address\n";
-	cout << "Enter street address: ";
-	getline(cin, tmpCust.busAddr.street);
-	cout << "\nEnter city:";
-	getline(cin, tmpCust.busAddr.city);
-	cout << "\nEnter State:";
-	getline(cin, tmpCust.busAddr.state);
-	cout << "\nEnter zip code:";
-	getline(cin, tmpCust.busAddr.zip);
+	tmpCust.busAddr = getAddress();
 
 
 	cout << "\n\nEnter Home Address\n";
-	cout << "Enter street address: ";
-	getline(cin, tmpCust.homeAddr.street);
-	cout << "\nEnter city:";
-	getline(cin, tmpCust.homeAddr.city);
-	cout << "\nEnter State:";
-	getline(cin, tmpCust.homeAddr.state);
-	cout << "\nEnter zip code:";
-	getline(cin, tmpCust.homeAddr.zip);
-
-
+	tmpCust.homeAddr = getAddress();
+	
 	return tmpCust;
 }
 
+/*
+Purpose : Prompts and validates user input to add a address
+Input Parameters : n/a
+I/O Parameters : n/a
+Output Parameters :
+	Customer tmpAddress - temporary Address object to store input values
+Function Return Value: Address object
+*/
+Address getAddress() {
+	Address tmpAddress;
+	cout << "Enter street address: ";
+	getline(cin, tmpAddress.street);
+	cout << "\nEnter city:";
+	getline(cin, tmpAddress.city);
+	cout << "\nEnter State:";
+	getline(cin, tmpAddress.state);
+	cout << "\nEnter zip code:";
+	getline(cin, tmpAddress.zip);
+	return tmpAddress;
+}
 /*
 Purpose : Prints all attributes of customer object
 Input Parameters : 
@@ -174,10 +183,58 @@ void showCustomer(Customer custObj) {
 	cout << "Home Address: \n";
 	cout << "\t" << custObj.homeAddr.street << ", " << custObj.homeAddr.city << ", " << custObj.homeAddr.state << " " << custObj.homeAddr.zip << endl;
 	
-//out << "\t" << custObj.busAddr.street << " " << 
+
 
 }
 
+
+/*
+Purpose : Searches customer array for a specific customer, based on first and last name
+Input Parameters :
+	Customer custArr[] - Array containing all customers
+	int arrSize - Size of custArr
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: n/a
+*/
+void findCust(Customer custArr[], int arrSize) {
+	string firstNm, lastNm; //temp variables to store first and last name
+	cin.clear();
+	cin.ignore();
+	//enter first and last name
+	cout << "\nEnter first name: ";
+	getline(cin, firstNm);
+	cout << "\nEnter last name: ";
+	getline(cin, lastNm);
+
+	for (int i = 0; i < arrSize; i++) {
+		if (strToUpper(custArr[i].firstNm) == strToUpper(firstNm) && strToUpper(custArr[i].lastNm) == strToUpper(lastNm)) {
+			showCustomer(custArr[i]);
+			return;
+		}
+	}
+
+	cout << "Unable to find customer, " << firstNm << " " << lastNm << "in the customer list\n";
+
+}
+
+
+/*
+Purpose : Convert string to upper case, one char at a time
+Input Parameters : 
+	string s - string to convert to uppercase
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: s variable converted to uppercase
+*/
+string strToUpper(string s) {
+	
+	for (int i = 0; i < s.length(); i++) {
+		s[i] = toupper(s[i]);
+	}
+
+	return s;
+}
 /*
 Purpose : One sentence describing WHAT it does
 Input Parameters : Description of value parameters; sent into the function, but not changed by the function
