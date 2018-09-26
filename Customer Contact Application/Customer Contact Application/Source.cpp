@@ -63,10 +63,6 @@ int main() {
 		case 3:
 			findCust(customerArr, arrSize);
 			break;
-		case 4:
-		//	cout << "Total Rent: $" << sumRents(&rent[0], arrSize) << endl;
-			break;
-	
 		default:
 			cout << "ERROR: Invalid Choice.  Try Again\n\n";
 		}
@@ -77,6 +73,8 @@ int main() {
 
 	//pauses program
 	cout << "Press enter key to exit program\n";
+	cin.clear();
+	cin.ignore();
 	cin.get();
 	return 0;
 }
@@ -134,14 +132,14 @@ Customer getCustomer() {
 	cout << "\nEnter customer first name: ";
 	getline(cin,tmpCust.firstNm);
 
-	cout << "\nEnter customer last name:";
+	cout << "nEnter customer last name:";
 	getline(cin, tmpCust.lastNm);
 
-	cout << "\n\nEnter Business Address\n";
+	cout << "\nEnter Business Address\n";
 	tmpCust.busAddr = getAddress();
 
 
-	cout << "\n\nEnter Home Address\n";
+	cout << "\nEnter Home Address\n";
 	tmpCust.homeAddr = getAddress();
 	
 	return tmpCust;
@@ -159,11 +157,11 @@ Address getAddress() {
 	Address tmpAddress;
 	cout << "Enter street address: ";
 	getline(cin, tmpAddress.street);
-	cout << "\nEnter city:";
+	cout << "Enter city:";
 	getline(cin, tmpAddress.city);
-	cout << "\nEnter State:";
+	cout << "Enter State:";
 	getline(cin, tmpAddress.state);
-	cout << "\nEnter zip code:";
+	cout << "Enter zip code:";
 	getline(cin, tmpAddress.zip);
 	return tmpAddress;
 }
@@ -204,7 +202,7 @@ void findCust(Customer custArr[], int arrSize) {
 	//enter first and last name
 	cout << "\nEnter first name: ";
 	getline(cin, firstNm);
-	cout << "\nEnter last name: ";
+	cout << "Enter last name: ";
 	getline(cin, lastNm);
 
 	for (int i = 0; i < arrSize; i++) {
