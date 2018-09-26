@@ -2,7 +2,7 @@
 #include <iomanip> // used to manipulate cout
 #include <string>
 #include <istream>
-#include <cstring>
+
 
 using namespace std;
 
@@ -63,6 +63,7 @@ int main() {
 		case 3:
 			findCust(customerArr, arrSize);
 			break;
+
 		default:
 			cout << "ERROR: Invalid Choice.  Try Again\n\n";
 		}
@@ -132,7 +133,7 @@ Customer getCustomer() {
 	cout << "\nEnter customer first name: ";
 	getline(cin,tmpCust.firstNm);
 
-	cout << "nEnter customer last name:";
+	cout << "Enter customer last name:";
 	getline(cin, tmpCust.lastNm);
 
 	cout << "\nEnter Business Address\n";
