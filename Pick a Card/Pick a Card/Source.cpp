@@ -200,10 +200,12 @@ string getDisplayValue(cardValues cardVal)
 
 /*
 Purpose : Deal a random card from deck
-Input Parameters : Description of value parameters; sent into the function, but not changed by the function
-I/O Parameters : Description of reference parameters that have one value upon entering the routine and different value upon leaving the routine
-Output Parameters : Description of reference parameters that receive their initial value inside the function
-Function Return Value: (for non-void functions) Description of any value returned by the function
+Input Parameters : 
+	cards deck[] -  52 element array of card structs
+I/O Parameters : 
+	cards& theCard - reference to cards variable
+Output Parameters : n/a
+Function Return Value: n/a
 */
 void deal(cards deck[], cards& theCard) {
 
@@ -212,22 +214,24 @@ void deal(cards deck[], cards& theCard) {
 }
 
 /*
-Purpose : One sentence describing WHAT it does
-Input Parameters : Description of value parameters; sent into the function, but not changed by the function
-I/O Parameters : Description of reference parameters that have one value upon entering the routine and different value upon leaving the routine
-Output Parameters : Description of reference parameters that receive their initial value inside the function
-Function Return Value: (for non-void functions) Description of any value returned by the function
+Purpose : Determines card with higher value and prints results
+Input Parameters : 
+	cards card1 = card variable number 1 for comparison
+	cards card2 = card variable number 2 for comparison
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: n/a
 */
 void winner(cards card1, cards card2) {
-	if (card1.card > card2.card) {
+	if (card1.card > card2.card) { //card 1 is winner
 		cout << "\n\nCard 1 wins, ";
 		printCard(card1);
 	}
-	else if(card2.card > card1.card) {
+	else if(card2.card > card1.card) {//card 2 is winner
 		cout << "\n\nCard 2 wins, ";
 		printCard(card2);
 	}
-	else {
+	else { //both cards have same val
 		cout << "Its a tie!" << endl;
 	}
 }
