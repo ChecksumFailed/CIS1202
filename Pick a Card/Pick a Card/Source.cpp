@@ -8,7 +8,7 @@
 
 using namespace std;
 
-
+//Define valid values for suits and card values
 enum suits { CLUBS, DIAMONDS, HEARTS, SPADES };
 enum cardValues { TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE };
 
@@ -19,16 +19,22 @@ struct cards {
 };
 
 
-//funcitons
+//functions
 void createDeck(cards[]);  //creates 52 card deck
 void printDeck(cards[]); //prints out deck
 void printCard(cards); //Prints single card
-void deal(cards[],cards&);
-void winner(cards,	cards);
-string getDisplayValue(cardValues);
-string getDisplayValue(suits);
+void deal(cards[],cards&); // deal random card from deck
+void winner(cards,	cards); //detrmine winning card and print results
+string getDisplayValue(cardValues); //get the display value of the cardValue
+string getDisplayValue(suits); //get the display value of the suit
 
-
+/*
+Programmer Name: Ben Scherer
+Program # : 7
+Course: CIS 1202 Section 502
+Date : 9/24/2018
+Program Description : Stores contact details for customers leveraging structs.
+*/
 int main() {
 	const int deckSize = 52;
 	cards deck[deckSize];
@@ -60,7 +66,14 @@ int main() {
 	return 0;
 }
 
-
+/*
+Purpose : Creates a 52 card deck
+Input Parameters : n/a
+I/O Parameters : 
+	cards deck[] - 52 element array of card structs
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void createDeck(cards deck[]) {
 	int cardNum = 0;
 	for (int i = 0; i < 4; i++) { //suits
@@ -72,6 +85,14 @@ void createDeck(cards deck[]) {
 	}
 }
 
+/*
+Purpose : print out each card in deck
+Input Parameters : 
+	cards deck[] - 52 element array of card structs
+I/O Parameters : n/a	
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void printDeck(cards deck[]) {
 	cout << "\nThe card deck: \n\n";
 	for (int i = 0; i < 52; i++) {
@@ -80,10 +101,26 @@ void printDeck(cards deck[]) {
 	cout << endl;
 }
 
+/*
+Purpose : print out an individual card
+Input Parameters :
+	cards card - a single cards struct
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void printCard(cards card) {
 	cout << getDisplayValue(card.card) << " of " << getDisplayValue(card.suit) << endl;
 }
 
+/*
+Purpose : return string representation of the suit
+Input Parameters :
+	suits suit - a value from suits enum
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: The string representation of the suit
+*/
 string getDisplayValue(suits suit)
 {
 	switch (suit)
@@ -105,6 +142,14 @@ string getDisplayValue(suits suit)
 	}
 }
 
+/*
+Purpose : return string representation of the card value
+Input Parameters :
+	cardValues cardVal - a value from cardValues enum
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: The string representation of the card value
+*/
 string getDisplayValue(cardValues cardVal)
 {
 	switch (cardVal)
@@ -153,12 +198,26 @@ string getDisplayValue(cardValues cardVal)
 	}
 }
 
+/*
+Purpose : Deal a random card from deck
+Input Parameters : Description of value parameters; sent into the function, but not changed by the function
+I/O Parameters : Description of reference parameters that have one value upon entering the routine and different value upon leaving the routine
+Output Parameters : Description of reference parameters that receive their initial value inside the function
+Function Return Value: (for non-void functions) Description of any value returned by the function
+*/
 void deal(cards deck[], cards& theCard) {
 
 	theCard = deck[rand() % 52]; //return random number between 0 - 51
 
 }
 
+/*
+Purpose : One sentence describing WHAT it does
+Input Parameters : Description of value parameters; sent into the function, but not changed by the function
+I/O Parameters : Description of reference parameters that have one value upon entering the routine and different value upon leaving the routine
+Output Parameters : Description of reference parameters that receive their initial value inside the function
+Function Return Value: (for non-void functions) Description of any value returned by the function
+*/
 void winner(cards card1, cards card2) {
 	if (card1.card > card2.card) {
 		cout << "\n\nCard 1 wins, ";
