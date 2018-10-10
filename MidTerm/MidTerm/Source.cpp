@@ -28,6 +28,7 @@ vector<string> parseString(string , char ); //Split delimted string
 string getString(); //Get string input and validate
 string getString(string); //get string input and validate.  Pass string to match for validation
 int getInt(); //Get int input and validate
+char getChar(); //Get char input and validate
 int getInt(int, int); //get int input and validate range.
 void displayMenu(); //display main menu
 void addMovie(string *, int&, int &, int &); //Add movie
@@ -133,13 +134,32 @@ void printMovies(string *arr, int size, int maxTitle, int maxGenre) {
 		printTableSeperator(numSeperator, '-');
 		
 	}
-
-
+	
 	cout << endl;
-	
-	
+	string choice;
+	do {
+		cout << "Enter Movie ID to update/delete(Q to quit):";
+			
+			
+		choice = getString();
+
+		
+		//cout << choice << endl;
+		if (choice == "q" || choice == "Q")
+			return; 
+
+		if (stoi(choice) >= 0 && stoi(choice) < size )
+			cout << endl;
+		else
+			cout << "\nError - Invalid Input.  Try Again\n";
+
+
+	} while (true);
 }
 
+void movieMenu() {
+
+}
 
 void printTableSeperator(int numDash, char charToPrint) {
 
@@ -205,6 +225,27 @@ int getInt() {
 	return intHolder;
 
 }
+
+char getCharChoice() {
+	cin.clear();
+	char holder; //temporary variable for getlne
+	bool isValid = false;
+
+	do {
+		cin >> holder;
+		if (cin.fail()) {
+			cin.clear();
+			cout << "\nYou have entered invalid input.  Try Again\n";
+		}
+		else
+			isValid = true;
+	} while (!isValid);
+	cin.clear();
+	cin.ignore();
+	return holder;
+
+}
+
 
 int getInt(int low, int high) {
 	cin.clear();
