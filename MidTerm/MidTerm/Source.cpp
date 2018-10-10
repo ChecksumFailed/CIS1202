@@ -35,6 +35,7 @@ void printMovies(string *,int); //print all movies in array
 void searchMenu(string[][NUMFIELDS], int); //Generates menu for searching the 2d array
 void updateDB(string*, string, int); //Writes changes to disk.
 vector<string> searchMovies(string[][NUMFIELDS], int, int);
+float getFloat(float, float);  // Get float input and validate.  Also checks range.
 
 /*
 Programmer Name: Ben Scherer
@@ -203,6 +204,26 @@ int getInt(int low, int high) {
 	cin.clear();
 	cin.ignore();
 	return intHolder;
+
+}
+
+float getFloat(float low, float high) {
+	cin.clear();
+	float tmpHolder; //temporary variable for getlne
+	bool isValid = false;
+
+	do {
+		cin >> tmpHolder;
+		if (cin.fail() || tmpHolder < low || tmpHolder > high) {
+			cin.clear();
+			cout << "\nYou have entered invalid input.  Try Again\n";
+		}
+		else
+			isValid = true;
+	} while (!isValid);
+	cin.clear();
+	cin.ignore();
+	return tmpHolder;
 
 }
 
