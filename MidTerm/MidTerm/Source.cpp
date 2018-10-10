@@ -23,15 +23,15 @@ const int MAXMOVIES = 500; //Maximum size of database
 
 //Functions
 void deleteMovie(string[][NUMFIELDS], int, int &); //Delete movie from array
-void loadDB(string arr[][NUMFIELDS], int &, string); //Read in file and load array
+void loadDB(string arr[][NUMFIELDS], int &, string, int &, int &); //Read in file and load array
 vector<string> parseString(string , char ); //Split delimted string
 string getString(); //Get string input and validate
 string getString(string); //get string input and validate.  Pass string to match for validation
 int getInt(); //Get int input and validate
 int getInt(int, int); //get int input and validate range.
 void displayMenu(); //display main menu
-void addMovie(string *, int&); //Add movie
-void printMovies(string *,int); //print all movies in array
+void addMovie(string *, int&, int &, int &); //Add movie
+void printMovies(string *,int,int,int); //print all movies in array
 void searchMenu(string[][NUMFIELDS], int); //Generates menu for searching the 2d array
 void updateDB(string*, string, int); //Writes changes to disk.
 vector<string> searchMovies(string[][NUMFIELDS], int, int);
@@ -50,9 +50,9 @@ int main() {
 	int size = 0; //current size of array
 	int choice; //stores user input
 	string dbFile = "movieDB.dat";
-	 
+	int maxTitle = 0, maxGenre = 0; //Max string length for title and genre.  Use for dynamic formatting, since these fields vary based on input
 
-	loadDB(movies, size, dbFile);
+	loadDB(movies, size, dbFile, maxTitle, maxGenre);
 	//Load existing movies into array
 
 
@@ -62,13 +62,13 @@ int main() {
 		choice = getInt();
 		switch (choice) {
 		case 1:
-			printMovies(&movies[0][0], size);
+			printMovies(&movies[0][0], size,maxTitle,maxGenre);
 			break;
 		case 2:
 			
 			break;
 		case 3:
-			addMovie(&movies[size][0], size);
+			addMovie(&movies[size][0], size,maxTitle,maxGenre);
 			break;
 		case 4:
 			break;
@@ -116,23 +116,21 @@ vector<string> searchMovies(string movies[][NUMFIELDS],int size,int choice) {
 	vector<string> searchResult;
 	return searchResult;;
 }
-void printMovies(string *arr, int size) {
-	int numSeperator = 125; //number of chars to use for table seperator
+void printMovies(string *arr, int size, int maxTitle, int maxGenre) {
+	int numSeperator =  3 + maxGenre + maxTitle + 4 + 6 + 5; //number of chars to use for table seperator. maxGenre + maxTitle + year + rating + number of seperators
 	
 	printTableSeperator(numSeperator, '-');
-	cout << endl << left << "|" << setw(70) << "Title" << "|" << setw(4) << "Year" << "|" <<  setw(40) << "Genre" << "|" << setw(6) << "Rating" << "|" << endl;
+	cout << endl << left << "|" << setw(3) << "Id" << "|" << setw(maxTitle) << "Title" << "|" << setw(4) << "Year" << "|" <<  setw(maxGenre) << "Genre" << "|" << setw(6) << "Rating" << "|" << endl; //header for table
 	printTableSeperator(numSeperator, '-');
 	for (int i = 0; i < size; i++) {
-	
 		/*cout << left;
 		for (int j = 0; j < NUMFIELDS; j++) {
 			cout << setw(30) << *(arr+ (i*NUMFIELDS) + j);
 		}
 		cout << endl;
 		*/
-		cout << "|" <<  left << setw(70) << *(arr + (i*NUMFIELDS)) << "|" << setw(4) << *(arr + (i*NUMFIELDS) + 1) << "|" << setw(40) << *(arr + (i*NUMFIELDS) + 2) << "|" << setw(6) << *(arr + (i*NUMFIELDS) + 3) << "|" << endl;
+		cout << "|" <<  left << setw(3) << i << "|" << setw(maxTitle) << *(arr + (i*NUMFIELDS)) << "|" << setw(4) << *(arr + (i*NUMFIELDS) + 1) << "|" << setw(maxGenre) << *(arr + (i*NUMFIELDS) + 2) << "|" << setw(6) << *(arr + (i*NUMFIELDS) + 3) << "|" << endl;
 		printTableSeperator(numSeperator, '-');
-	
 		
 	}
 
@@ -150,7 +148,7 @@ void printTableSeperator(int numDash, char charToPrint) {
 
 	cout << endl;
 }
-void addMovie(string *arr, int &size) {
+void addMovie(string *arr, int &size, int &maxTitle, int &maxGenre) {
 	if (size == MAXMOVIES) {
 		cout << "The current release has a limitation of : " << MAXMOVIES << ".  Delete entries prior to adding more.";
 		return;
@@ -168,6 +166,11 @@ void addMovie(string *arr, int &size) {
 	rating.resize(3); //truncate to one decimal pint
 	*(arr + 3) = rating;
 	cout << endl << endl;
+
+	if ((*arr).size() > maxTitle)
+		maxTitle = (*arr).size();
+	if ((*(arr + 2)).size() > maxGenre)
+		maxGenre = (*(arr + 2)).size();
 
 	size++;
 
@@ -297,7 +300,7 @@ void deleteMovie(int arr[][NUMFIELDS], int index, int &size) {
 
 }
 
-void loadDB (string arr[][NUMFIELDS], int &size, string filePath) {
+void loadDB (string arr[][NUMFIELDS], int &size, string filePath, int &maxTitle, int &maxGenre) {
 	string strHold; //placeholder for getLine
 	ifstream fileStream(filePath); //input stream for stats file
 	
@@ -321,6 +324,10 @@ void loadDB (string arr[][NUMFIELDS], int &size, string filePath) {
 				arr[size][1] = parsedData[1]; //Movie Year
 				arr[size][2] = parsedData[2]; //Movie Genre
 				arr[size][3] = parsedData[3]; //Movie Rating
+				if (parsedData[0].size() > maxTitle)
+					maxTitle = parsedData[0].length();
+				if (parsedData[2].size() > maxGenre)
+					maxGenre = parsedData[2].length();
 				size++;
 			}
 			catch (exception e) {
@@ -367,7 +374,7 @@ void updateDB(string *arr, string file, int size) {
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < NUMFIELDS; j++) {
 			outFile << *(arr + (i*NUMFIELDS) + j);
-			if (i != NUMFIELDS - 1)
+			if (j != NUMFIELDS - 1)
 				outFile << "|";
 		}
 		outFile << endl;
