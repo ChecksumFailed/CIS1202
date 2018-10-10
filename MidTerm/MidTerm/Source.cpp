@@ -36,6 +36,7 @@ void searchMenu(string[][NUMFIELDS], int); //Generates menu for searching the 2d
 void updateDB(string*, string, int); //Writes changes to disk.
 vector<string> searchMovies(string[][NUMFIELDS], int, int);
 float getFloat(float, float);  // Get float input and validate.  Also checks range.
+void printTableSeperator(int, char); //Prints out seperator for table
 
 /*
 Programmer Name: Ben Scherer
@@ -116,17 +117,23 @@ vector<string> searchMovies(string movies[][NUMFIELDS],int size,int choice) {
 	return searchResult;;
 }
 void printMovies(string *arr, int size) {
-	int counter = 0;
-
-
-	cout << left << setw(20) << "Title" << setw(20) << "Year" << setw(20) << "Genre" << setw(20) << "Rating" << endl;
-
+	int numSeperator = 125; //number of chars to use for table seperator
+	
+	printTableSeperator(numSeperator, '-');
+	cout << endl << left << "|" << setw(70) << "Title" << "|" << setw(4) << "Year" << "|" <<  setw(40) << "Genre" << "|" << setw(6) << "Rating" << "|" << endl;
+	printTableSeperator(numSeperator, '-');
 	for (int i = 0; i < size; i++) {
-		cout << left;
+	
+		/*cout << left;
 		for (int j = 0; j < NUMFIELDS; j++) {
-			cout << setw(20) << *(arr+ (i*NUMFIELDS) + j);
+			cout << setw(30) << *(arr+ (i*NUMFIELDS) + j);
 		}
 		cout << endl;
+		*/
+		cout << "|" <<  left << setw(70) << *(arr + (i*NUMFIELDS)) << "|" << setw(4) << *(arr + (i*NUMFIELDS) + 1) << "|" << setw(40) << *(arr + (i*NUMFIELDS) + 2) << "|" << setw(6) << *(arr + (i*NUMFIELDS) + 3) << "|" << endl;
+		printTableSeperator(numSeperator, '-');
+	
+		
 	}
 
 
@@ -135,16 +142,23 @@ void printMovies(string *arr, int size) {
 	
 }
 
+
+void printTableSeperator(int numDash, char charToPrint) {
+
+	for (int k = 0; k < numDash; k++)
+		cout << charToPrint;
+
+	cout << endl;
+}
 void addMovie(string *arr, int &size) {
 	if (size == MAXMOVIES) {
 		cout << "The current release has a limitation of : " << MAXMOVIES << ".  Delete entries prior to adding more.";
 		return;
 	}
 
-	cout << size << endl;
+	
 	cout << "Enter title of movie: ";
 	*arr = getString();;
-	cout << arr << "\t" << *arr <<endl;
 	cout << "\nEnter 4 digit year of movie: ";
 	*(arr + 1) = getString("^\\d{4}$");
 	cout << "\nEnter genre of movie: ";
@@ -291,19 +305,26 @@ void loadDB (string arr[][NUMFIELDS], int &size, string filePath) {
 	if (fileStream.fail())
 		return;
 
-	cout << "Reading stats file....\n";
+	cout << "Reading in database....\n";
 
 	//Read in line, parse data and populate arrays.  
 	while (getline(fileStream, strHold)) {
-		//cout << "Line: " << strHold << endl;
+		
 		vector<string> parsedData = parseString(strHold, '|');
-		if (parsedData.size() > 0) {
-			arr[size][0] = parsedData[0]; //Movie Title
-			arr[size][1] = parsedData[1]; //Movie Year
-			arr[size][2] = parsedData[2]; //Movie Genre
-			arr[size][3] = parsedData[3]; //Movie Rating
+		
+		if (parsedData.size() == 4) {
+	
+			try {
+				arr[size][0] = parsedData[0]; //Movie Title
+				arr[size][1] = parsedData[1]; //Movie Year
+				arr[size][2] = parsedData[2]; //Movie Genre
+				arr[size][3] = parsedData[3]; //Movie Rating
+				size++;
+			}
+			catch (exception e) {
+				cout << "Malformed data, unable to load: " << parsedData[0];
+			}
 			
-			size++;
 		}
 		
 	}
