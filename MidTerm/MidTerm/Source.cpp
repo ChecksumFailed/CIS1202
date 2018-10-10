@@ -162,9 +162,11 @@ void addMovie(string *arr, int &size) {
 	cout << "\nEnter 4 digit year of movie: ";
 	*(arr + 1) = getString("^\\d{4}$");
 	cout << "\nEnter genre of movie: ";
-	*(arr + 2) = getString();
-	cout << "\nEnter movie rating(1-10): ";
-	*(arr + 3) = to_string(getInt(1, 10));
+	*(arr + 2) = getString(); 
+	cout << "\nEnter movie rating(1.0-10.0): ";
+	string rating = to_string(getFloat(1.0, 10.0)); //Get rating and convert to string
+	rating.resize(3); //truncate to one decimal pint
+	*(arr + 3) = rating;
 	cout << endl << endl;
 
 	size++;
