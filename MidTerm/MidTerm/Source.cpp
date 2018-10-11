@@ -39,7 +39,11 @@ void searchMovies(string[][NUMFIELDS], int &,int,int);
 float getFloat(float, float);  // Get float input and validate.  Also checks range.
 void printTableSeperator(int, char); //Prints out seperator for table
 void movieActions(string *, int &,int&,int&);//Provides actions that can be taken against an individual movie
-void updateMovie(string *, int &, int &, int&); //Provides update functionality
+void updateMovie(string *, int &, int&); //Provides update functionality
+void selectionSortFloat(string[][NUMFIELDS], int, int); //Peform selection sort on 2d array based on float values
+void selectionSortString(string[][NUMFIELDS], int, int);//Peform selection sort on 2d array based on string values
+void swap(string &, string &); //swap two reference values
+void sortMovies(string[][NUMFIELDS], int); //Provides menu and input validation for sorting
 
 /*
 Programmer Name: Ben Scherer
@@ -65,24 +69,22 @@ int main() {
 		choice = getInt();
 		switch (choice) {
 		case 1:
-			printMovies(&movies[0][0], size,size,maxTitle,maxGenre);
-			break;
+			printMovies(&movies[0][0], size,size,maxTitle,maxGenre);break;
 		case 2:
-			searchMovies(movies, size, maxTitle, maxGenre);
-			break;
+			searchMovies(movies, size, maxTitle, maxGenre);	break;
 		case 3:
-			addMovie(&movies[size][0], size,maxTitle,maxGenre);
-			break;
+			addMovie(&movies[size][0], size,maxTitle,maxGenre);	break;
 		case 4:
+			sortMovies(movies, size);
 			break;
 		default:
 			cout << "ERROR: Invalid Choice.  Try Again\n\n";
 		}
 
 		
-	} while (choice != 4);
+	} while (choice != 5);
 
-	cout << "Writing changes to disk....";
+	cout << "Writing changes to disk....\n";
 	updateDB(&movies[0][0], dbFile, size);
 
 	//pauses program
@@ -101,6 +103,8 @@ int searchMenu() {
 		<< "Enter Choice: ";
 
 	return getInt(1,5);
+
+
 
 	   
 }
@@ -362,7 +366,8 @@ void displayMenu() {
 	cout << "\n1 - Print Movie Database\n";
 	cout << "2 - Search Movie Database\n";
 	cout << "3 - Add Movie\n";
-	cout << "4 - Quit\n";
+	cout << "5 - Sort Database\n";
+	cout << "5 - Quit\n";
 	cout << "Enter choice: ";
 }
 
@@ -569,3 +574,112 @@ void updateDB(string *arr, string file, int size) {
 	}
 	outFile.close();
 }
+
+void sortMovies(string movies[][NUMFIELDS], int size) {
+
+	cout << "Select value by which to sort on: \n"
+		<< " 1 - Title\n"
+		<< " 2 - Year\n"
+		<< " 3 - Genre\n"
+		<< " 4 - Rating\n"
+		<< " 5 - Quit\n";
+	cout << "Enter Choice: ";
+	int choice = getInt(1, 5);
+
+	switch (choice) {
+	case 1: 
+		selectionSortString(movies, size, choice); break;
+	case 2: 
+		selectionSortFloat(movies, size, choice); break;
+	case 3: 
+		selectionSortString(movies, size, choice); break;
+	case 4:
+		selectionSortFloat(movies, size, choice); break;
+	}
+}
+
+/*
+Purpose : Performs selection sort based on int array, ascending
+Input Parameters :
+	int size - number of elements in arrays
+I/O Parameters :
+	string arr[] - array of integers
+Output Parameters : n/a
+Function Return Value: n/a
+*/
+void selectionSortString(string arr[][NUMFIELDS], int size,int choice) {
+
+	int minIndex;
+	string minValue;
+	choice--;
+	for (int start = 0; start < (size - 1); start++) {
+		minIndex = start;
+		minValue = arr[start][choice];
+
+		for (int index = start + 1; index < size; index++) {
+
+			if (arr[index][choice].compare(minValue) < 0) {
+				minValue = arr[index][choice];
+				minIndex = index;
+
+			}
+		}
+		swap(arr[minIndex][choice], arr[start][choice]);
+
+	}
+
+	cout << endl;
+}
+
+/*
+Purpose : Swaps int values
+Input Parameters :
+
+I/O Parameters :
+	int a - first  value to swap
+	int b - second  value to swap
+Output Parameters :
+
+Function Return Value: n/a
+*/
+void swap(string &a, string &b) {
+	string temp = a;
+	a = b;
+	b = temp;
+}
+
+
+
+/*
+Purpose : Performs selection sort based on int array, ascending
+Input Parameters :
+	int size - number of elements in arrays
+I/O Parameters :
+	string arr[] - array of integers
+Output Parameters : n/a
+Function Return Value: n/a
+*/
+void selectionSortFloat(string arr[][NUMFIELDS], int size, int choice) {
+	choice--;
+	int minIndex;
+	float minValue;
+
+	for (int start = 0; start < (size - 1); start++) {
+		minIndex = start;
+		minValue = stof(arr[start][choice]);
+
+		for (int index = start + 1; index < size; index++) {
+
+			if (stof(arr[index][choice]) < minValue) {
+				minValue = stof(arr[index][choice]);
+				minIndex = index;
+
+			}
+		}
+		swap(arr[minIndex][choice], arr[start][choice]);
+
+	}
+
+	cout << endl;
+}
+
