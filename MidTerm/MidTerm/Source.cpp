@@ -32,6 +32,7 @@ int getInt(int, int); //get int input and validate range.
 void displayMenu(); //display main menu
 void addMovie(string *, int&, int &, int &); //Add movie
 void printMovies(string *,int,int &, int ,int); //print all movies in array
+void printMovies(vector<string *>,  int &, int, int); //print all movies in vector
 int searchMenu(); //Generates menu for searching the 2d array
 void updateDB(string*, string, int); //Writes changes to disk.
 void searchMovies(string[][NUMFIELDS], int &,int,int);
@@ -117,7 +118,7 @@ void searchMovies(string movies[][NUMFIELDS],int &size,int maxTitle, int maxGenr
 		break;
 	case 2:
 		cout << "Enter Year to Search: ";
-		strToMatch = getString("^\\d{4}$");
+		intToMatch = stoi(getString("^\\d{4}$"));
 		break;
 	case 3:
 		cout << "Enter Genre to Search: ";
@@ -131,16 +132,17 @@ void searchMovies(string movies[][NUMFIELDS],int &size,int maxTitle, int maxGenr
 		return;
 	}
 
-	regex strRegEx(strToMatch, regex_constants::icase | regex_constants::ECMAScript); //Regex pattern to validate input
+	regex strRegEx(".*" + strToMatch + ".*", regex_constants::icase | regex_constants::ECMAScript); //Regex pattern to validate input
 
 	for (int i = 0; i < size; i++) {
 			switch (choice) {
 			case 1: 
+				cout << movies[i][0] << endl;
 				if (regex_match(movies[i][0],strRegEx))
 					searchResult.push_back(&movies[i][0]);
 				break;
 			case 2:
-				if (movies[i][1] == strToMatch)
+				if (stoi(movies[i][1]) == intToMatch)
 					searchResult.push_back(&movies[i][0]);
 				break;
 			case 3:
@@ -148,7 +150,7 @@ void searchMovies(string movies[][NUMFIELDS],int &size,int maxTitle, int maxGenr
 					searchResult.push_back(&movies[i][0]);
 				break;
 			case 4:
-				if (stoi(movies[i][1]) == stoi(strToMatch))
+				if (stoi(movies[i][3]) == intToMatch)
 					searchResult.push_back(&movies[i][0]);
 				break;
 			}
@@ -160,7 +162,7 @@ void searchMovies(string movies[][NUMFIELDS],int &size,int maxTitle, int maxGenr
 		return;
 	}
 
-	printMovies(searchResult[0], searchResult.size(), size,maxTitle, maxGenre);
+	printMovies(searchResult, size,maxTitle, maxGenre);
 	
 }
 
@@ -183,7 +185,6 @@ void printMovies(string *arr, int printSize, int &arrSize,int maxTitle, int maxG
 	cout << endl;
 	if (printSize == 0)
 		return;
-
 	string choice;
 	bool isValid = false;
 	do {
@@ -205,6 +206,50 @@ void printMovies(string *arr, int printSize, int &arrSize,int maxTitle, int maxG
 	} while (!isValid);
 
 	movieActions((arr + (stoi(choice) * NUMFIELDS)), arrSize);
+	
+}
+
+void printMovies(vector<string*> searchResult,  int &arrSize, int maxTitle, int maxGenre) {
+
+	string *arr; //temporary placeholder for pointer
+	int numSeperator = 3 + maxGenre + maxTitle + 4 + 6 + 5; //number of chars to use for table seperator. maxGenre + maxTitle + year + rating + number of seperators
+	int printSize = searchResult.size();
+
+	printTableSeperator(numSeperator, '-');
+	cout << endl << left << "|" << setw(3) << "Id" << "|" << setw(maxTitle) << "Title" << "|" << setw(4) << "Year" << "|" << setw(maxGenre) << "Genre" << "|" << setw(6) << "Rating" << "|" << endl; //header for table
+	printTableSeperator(numSeperator, '-');
+	for (int i = 0; i < printSize; i++) {
+		arr = searchResult[i];
+		cout << "|" << left << setw(3) << i << "|" << setw(maxTitle) << *(arr) << "|" << setw(4) << *(arr + 1) << "|" << setw(maxGenre) << *(arr + 2) << "|" << setw(6) << *(arr + 3) << "|" << endl;
+		printTableSeperator(numSeperator, '-');
+
+	}
+
+	cout << endl;
+	if (printSize == 0)
+		return;
+	string choice;
+	bool isValid = false;
+	do {
+		cout << "Enter Movie ID to update/delete(Q to quit):";
+		choice = getString();
+
+		try {
+			if (choice == "q" || choice == "Q")
+				return;
+			else if (stoi(choice) >= 0 && stoi(choice) < printSize)
+				isValid = true;
+			else
+				cout << "\nError - Invalid Input.  Try Again\n";
+		}
+		catch (exception e) {
+			cout << "\nError - Invalid Input.  Try Again\n";
+		}
+
+	} while (!isValid);
+
+	movieActions(searchResult[stoi(choice)], arrSize);
+
 }
 
 void movieActions(string *movie,int &arrSize) {
@@ -382,13 +427,11 @@ string getString(string strToMatch) {
 void deleteMovie(string *arr, int &size) {
 	size--;
 	string *lastElement = arr + (size * NUMFIELDS - 1); //Last ptr in array
-	//No point in this, since the memory is already allocated.
-	/*cout << arr << "\t" << *arr << endl;
-	for (int i = 0; i < NUMFIELDS; i++) {//Null out values to "Delete" Them.
-		cout << (arr + i) << "\t" << *(arr + i) << endl;
-		*(arr + i) = nullptr;
+	
+	for (int i = 0; i < NUMFIELDS; i++) {//clear out values to "Delete" Them.  Memory is already allocated, so this is more a psuedo delete
+		*(arr + i) = "";
 	}
-	*/
+	
 	//Shift all element of array.
 	for (arr; (lastElement - arr) >= 0; arr += NUMFIELDS)
 	{
@@ -444,10 +487,7 @@ Purpose : Splits a string into a vector, based on delimeter passed to function
 Input Parameters :
 	string strToSplit - String that needs split
 	char delim - Delimeter to split string on
-
-
-I/O Parameters :
-
+I/O Parameters : N/A
 Output Parameters :
 	istringstream strStream - string stream var, needed to split
 	string tempStr - temporary holder for splitting string
