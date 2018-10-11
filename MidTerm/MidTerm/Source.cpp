@@ -109,6 +109,17 @@ int searchMenu() {
 	   
 }
 
+/*
+Purpose : Allows user to update individual fields of movie
+Input Parameters : n/a
+I/O Parameters : 
+	string *arr - ptr to individual movie
+	int &maxTitle - max length of title string
+	int maxGenre - max leng=th of genre string
+Output Parameters : 
+	int choice - user menu choice
+Function Return Value: n/a
+*/
 void updateMovie(string *arr,int &maxTitle,int &maxGenre) {
 	int choice;
 
@@ -156,7 +167,21 @@ void updateMovie(string *arr,int &maxTitle,int &maxGenre) {
 
 }
 
-
+/*
+Purpose : Prompts user to choose what field to search on, does input validation, then performs a linear search.  Results are  displayed and user can update from search results
+Input Parameters : 
+	string movies  - 2d Array of movies
+	int size - size of array
+	int maxTitle - max length of title string
+	int maxGenre -max lenght of genre string
+I/O Parameters :n/a
+Output Parameters : 
+	int choice - Type of search to perform
+	int intToMatch - used for Int based comparison
+	string strToMatch - used for String based comparison
+Function Return Value: 
+	vector<string *> - vector of pointers to search results
+*/
 void searchMovies(string movies[][NUMFIELDS],int &size,int maxTitle, int maxGenre) {
 	int choice = searchMenu();
 	int intToMatch;
@@ -219,10 +244,21 @@ void searchMovies(string movies[][NUMFIELDS],int &size,int maxTitle, int maxGenr
 	
 }
 
-
+/*
+Purpose : Print array of movies, validate input and take action on movie is selected
+Input Parameters :
+	int printSize - number of entries to print
+I/O Parameters :
+	string *arr - Vector of pointers
+	int & maxTitle - Maximum lengh of title string
+	int & maxGenre - Maximum lengh of genre string
+	int & arrsize - Current size of array
+Output Parameters :
+	string *arr - placeholder pointer variable
+	int numSeperator - the lengh of table seperator
+Function Return Value: n/a
+*/
 void printMovies(string *arr, int printSize, int &arrSize,int &maxTitle, int &maxGenre) {
-	
-	
 	int numSeperator =  3 + maxGenre + maxTitle + 4 + 6 + 5; //number of chars to use for table seperator. maxGenre + maxTitle + year + rating + number of seperators
 	
 	printTableSeperator(numSeperator, '-');
@@ -262,6 +298,20 @@ void printMovies(string *arr, int printSize, int &arrSize,int &maxTitle, int &ma
 	
 }
 
+/*
+Purpose : Print array of movies, validate input and take action on movie is selected
+Input Parameters :
+I/O Parameters :
+	vector<string**> - Vector of pointers 
+	int & maxTitle - Maximum lengh of title string
+	int & maxGenre - Maximum lengh of genre string
+	int & arrsize - Current size of array
+Output Parameters :
+	string *arr - placeholder pointer variable
+	int numSeperator - the lengh of table seperator
+	int printSize - number of entries to print
+Function Return Value: n/a
+*/
 void printMovies(vector<string*> searchResult,  int &arrSize, int &maxTitle, int &maxGenre) {
 
 	string *arr; //temporary placeholder for pointer
@@ -305,6 +355,17 @@ void printMovies(vector<string*> searchResult,  int &arrSize, int &maxTitle, int
 
 }
 
+/*
+Purpose : Displays actions that can be taken against individual movie, validates input and then call appropriate function
+Input Parameters :
+I/O Parameters :
+	string *movie - pointer to first element of movie to modify
+	int & maxTitle - Maximum lengh of title string
+	int & maxGenre - Maximum lengh of genre string
+	int & arrsize - Current size of array
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void movieActions(string *movie,int &arrSize, int &maxTitle,int &maxGenre) {
 	cout << "1 - Update Movie\n"
 		<< "2 - Delete Movie\n"
@@ -326,6 +387,15 @@ void movieActions(string *movie,int &arrSize, int &maxTitle,int &maxGenre) {
 
 }
 
+/*
+Purpose : Prints table seperator
+Input Parameters :
+	int numDash - Length of seperator
+	char charToPrint - character to use a seperator
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void printTableSeperator(int numDash, char charToPrint) {
 
 	for (int k = 0; k < numDash; k++)
@@ -333,6 +403,18 @@ void printTableSeperator(int numDash, char charToPrint) {
 
 	cout << endl;
 }
+
+/*
+Purpose : Adds Movie to 2d array
+Input Parameters :
+I/O Parameters : 
+	string *arr - pointer to next empty element in array
+	int & maxTitle - Maximum lengh of title string
+	int & maxGenre - Maximum lengh of genre string
+	int & size - Current size of array
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void addMovie(string *arr, int &size, int &maxTitle, int &maxGenre) {
 	if (size == MAXMOVIES) {
 		cout << "The current release has a limitation of : " << MAXMOVIES << ".  Delete entries prior to adding more.";
@@ -361,7 +443,13 @@ void addMovie(string *arr, int &size, int &maxTitle, int &maxGenre) {
 
 
 }
-
+/*
+Purpose : Displays main menu
+Input Parameters : n/a
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void displayMenu() {
 	cout << "\n1 - Print Movie Database\n";
 	cout << "2 - Search Movie Database\n";
@@ -371,7 +459,14 @@ void displayMenu() {
 	cout << "Enter choice: ";
 }
 
-
+/*
+Purpose : Gets int input and validates
+Input Parameters : n/a
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value:
+	int intHolder - float to validate input against
+*/
 int getInt() {
 	cin.clear();
 	int intHolder; //temporary variable for getlne
@@ -394,7 +489,16 @@ int getInt() {
 }
 
 
-
+/*
+Purpose : Gets int input and validates against range
+Input Parameters :
+	int low - Low end of range
+	int high - High end of range
+I/O Parameters : n/a
+Output Parameters :
+Function Return Value:
+	int intHolder - float to validate input against
+*/
 int getInt(int low, int high) {
 	cin.clear();
 	int intHolder; //temporary variable for getlne
@@ -417,6 +521,17 @@ int getInt(int low, int high) {
 
 }
 
+
+/*
+Purpose : Gets float input and validates against range
+Input Parameters :
+	float low - Low end of range
+	float high - High end of range
+I/O Parameters : n/a
+Output Parameters :	
+Function Return Value:
+	float tmpHolder - float to validate input against
+*/
 float getFloat(float low, float high) {
 	cin.clear();
 	float tmpHolder; //temporary variable for getlne
@@ -438,6 +553,16 @@ float getFloat(float low, float high) {
 
 }
 
+
+/*
+Purpose : Gets string input and validates 
+Input Parameters : n/a	
+I/O Parameters : n/a
+Output Parameters :
+	bool isValid - Used to control loop until valid input is entered
+Function Return Value:
+	string strHold - holds input from cin
+*/
 string getString() {
 	cin.clear();
 	string strHolder; //temporary variable for getlne
@@ -457,6 +582,17 @@ string getString() {
 	return strHolder;
 
 }
+
+/*
+Purpose : Gets string input and validates against parameter
+Input Parameters : 
+	string strToMatch - string to validate input against
+I/O Parameters : n/a
+Output Parameters : 
+	bool isValid - Used to control loop until valid input is entered
+Function Return Value: 
+	string strHold - holds input from cin
+*/
 
 string getString(string strToMatch) {
 	cin.clear();
@@ -479,6 +615,18 @@ string getString(string strToMatch) {
 
 }
 
+
+/*
+Purpose : Delete movie and assoicated fields from 2D array
+Input Parameters : n/a
+I/O Parameters : 
+	string *arr - pointer to first field in movie to delete
+	int &size - reference to array size.  Will be decreased by one
+Output Parameters : 
+	string *lastElement - pointer to last element in array
+Function Return Value: n/a
+*/
+
 void deleteMovie(string *arr, int &size) {
 	size--;
 	string *lastElement = arr + (size * NUMFIELDS - 1); //Last ptr in array
@@ -496,12 +644,25 @@ void deleteMovie(string *arr, int &size) {
 	}
 }
 
+
+/*
+Purpose : Loads file into 2D array
+Input Parameters : 
+	string filePath - Path to input file
+I/O Parameters : 
+	string arr[][NUMFIELDS] - 2D array of movies
+	int &size - size of array
+	int &maxTitle - Length of longest title string
+	int &maxGenre - length of longest genre string
+Output Parameters : 
+	string strHold - temporary paceholder for input
+	ifstrem fileSTream - used to read in file
+Function Return Value: n/a
+*/
 void loadDB (string arr[][NUMFIELDS], int &size, string filePath, int &maxTitle, int &maxGenre) {
 	string strHold; //placeholder for getLine
 	ifstream fileStream(filePath); //input stream for stats file
 	
-
-
 	//If loading statsFile fails, return.  No dat to laod
 	if (fileStream.fail())
 		return;
@@ -561,7 +722,17 @@ vector<string> parseString(string strToSplit, char delim) {
 }
 
 
-//write changes to db file
+
+/*
+Purpose : Writes 2d array to file
+Input Parameters :
+	string *arr: pointer to first element of 2d array
+	string file: filename to write changes to
+	int size: size of array
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void updateDB(string *arr, string file, int size) {
 	ofstream outFile(file);
 	for (int i = 0; i < size; i++) {
@@ -575,6 +746,16 @@ void updateDB(string *arr, string file, int size) {
 	outFile.close();
 }
 
+
+/*
+Purpose : Provides menu and user input validation, then calls the appropriate sort function
+Input Parameters :
+	int size - number of elements in arrays
+	string arr[][NUMFIELDS] - 2D string array
+I/O Parameters : n/a	
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void sortMovies(string movies[][NUMFIELDS], int size) {
 
 	cout << "Select value by which to sort on: \n"
@@ -599,11 +780,11 @@ void sortMovies(string movies[][NUMFIELDS], int size) {
 }
 
 /*
-Purpose : Performs selection sort based on int array, ascending
+Purpose : Performs selection sort based on 2d array String values, ascending
 Input Parameters :
 	int size - number of elements in arrays
 I/O Parameters :
-	string arr[] - array of integers
+	string arr[][NUMFIELDS] - 2D string array
 Output Parameters : n/a
 Function Return Value: n/a
 */
@@ -632,14 +813,12 @@ void selectionSortString(string arr[][NUMFIELDS], int size,int choice) {
 }
 
 /*
-Purpose : Swaps int values
-Input Parameters :
-
+Purpose : Swaps string values
+Input Parameters : n/a
 I/O Parameters :
 	int a - first  value to swap
 	int b - second  value to swap
-Output Parameters :
-
+Output Parameters : n/a
 Function Return Value: n/a
 */
 void swap(string &a, string &b) {
@@ -648,14 +827,12 @@ void swap(string &a, string &b) {
 	b = temp;
 }
 
-
-
 /*
-Purpose : Performs selection sort based on int array, ascending
+Purpose : Performs selection sort based on 2d array float values, ascending
 Input Parameters :
 	int size - number of elements in arrays
 I/O Parameters :
-	string arr[] - array of integers
+	string arr[][NUMFIELDS] - 2D string array
 Output Parameters : n/a
 Function Return Value: n/a
 */
