@@ -31,14 +31,15 @@ int getInt(); //Get int input and validate
 int getInt(int, int); //get int input and validate range.
 void displayMenu(); //display main menu
 void addMovie(string *, int&, int &, int &); //Add movie
-void printMovies(string *,int,int &, int ,int); //print all movies in array
-void printMovies(vector<string *>,  int &, int, int); //print all movies in vector
+void printMovies(string *,int,int &, int & ,int &); //print all movies in array
+void printMovies(vector<string *>,  int &, int &, int &); //print all movies in vector
 int searchMenu(); //Generates menu for searching the 2d array
 void updateDB(string*, string, int); //Writes changes to disk.
 void searchMovies(string[][NUMFIELDS], int &,int,int);
 float getFloat(float, float);  // Get float input and validate.  Also checks range.
 void printTableSeperator(int, char); //Prints out seperator for table
-void movieActions(string *, int &);
+void movieActions(string *, int &,int&,int&);//Provides actions that can be taken against an individual movie
+void updateMovie(string *, int &, int &, int&); //Provides update functionality
 
 /*
 Programmer Name: Ben Scherer
@@ -104,6 +105,54 @@ int searchMenu() {
 	   
 }
 
+void updateMovie(string *arr,int &maxTitle,int &maxGenre) {
+	int choice;
+
+	
+	do {
+		cout << "Movie Update Menu\n";
+		cout << "1 - Update Title(" << *arr << ")\n"
+			<< "2 - Update Year(" << *(arr +1) << ")\n"
+			<< "3 - Update Genre(" << *(arr + 2) << ")\n"
+			<< "4 - Update Rating(" << *(arr + 3) << ")\n"
+			<< "5 - Quit\n";
+		cout << "Enter Choice:";
+		choice = getInt(1, 5);
+
+		switch (choice) {
+		case 1:
+			cout << "Enter title of movie: ";
+			*arr = getString();;
+			if ((*arr).size() > maxTitle)
+				maxTitle = (*arr).size();
+			break;
+
+		case 2:
+			cout << "\nEnter 4 digit year of movie: ";
+			*(arr + 1) = getString("^\\d{4}$");
+			break;
+		case 3:
+			cout << "\nEnter genre of movie: ";
+			*(arr + 2) = getString();
+			if ((*(arr + 2)).size() > maxGenre)
+				maxGenre = (*(arr + 2)).size();
+			break;
+		case 4:
+			cout << "\nEnter movie rating(1.0-10.0): ";
+			string rating = to_string(getFloat(1.0, 10.0)); //Get rating and convert to string
+			rating.resize(3); //truncate to one decimal pint
+			*(arr + 3) = rating;
+			break;
+		}
+		
+		
+		cout << endl << endl;
+	} while (choice != 5);
+	
+
+}
+
+
 void searchMovies(string movies[][NUMFIELDS],int &size,int maxTitle, int maxGenre) {
 	int choice = searchMenu();
 	int intToMatch;
@@ -167,7 +216,7 @@ void searchMovies(string movies[][NUMFIELDS],int &size,int maxTitle, int maxGenr
 }
 
 
-void printMovies(string *arr, int printSize, int &arrSize,int maxTitle, int maxGenre) {
+void printMovies(string *arr, int printSize, int &arrSize,int &maxTitle, int &maxGenre) {
 	
 	
 	int numSeperator =  3 + maxGenre + maxTitle + 4 + 6 + 5; //number of chars to use for table seperator. maxGenre + maxTitle + year + rating + number of seperators
@@ -205,11 +254,11 @@ void printMovies(string *arr, int printSize, int &arrSize,int maxTitle, int maxG
 
 	} while (!isValid);
 
-	movieActions((arr + (stoi(choice) * NUMFIELDS)), arrSize);
+	movieActions((arr + (stoi(choice) * NUMFIELDS)), arrSize,maxTitle,maxGenre);
 	
 }
 
-void printMovies(vector<string*> searchResult,  int &arrSize, int maxTitle, int maxGenre) {
+void printMovies(vector<string*> searchResult,  int &arrSize, int &maxTitle, int &maxGenre) {
 
 	string *arr; //temporary placeholder for pointer
 	int numSeperator = 3 + maxGenre + maxTitle + 4 + 6 + 5; //number of chars to use for table seperator. maxGenre + maxTitle + year + rating + number of seperators
@@ -248,11 +297,11 @@ void printMovies(vector<string*> searchResult,  int &arrSize, int maxTitle, int 
 
 	} while (!isValid);
 
-	movieActions(searchResult[stoi(choice)], arrSize);
+	movieActions(searchResult[stoi(choice)], arrSize,maxTitle,maxGenre);
 
 }
 
-void movieActions(string *movie,int &arrSize) {
+void movieActions(string *movie,int &arrSize, int &maxTitle,int &maxGenre) {
 	cout << "1 - Update Movie\n"
 		<< "2 - Delete Movie\n"
 		<< "3 - Quit\n";
@@ -262,6 +311,7 @@ void movieActions(string *movie,int &arrSize) {
 
 	switch (choice) {
 	case 1: 
+		updateMovie(movie, maxTitle, maxGenre);
 		break;
 	case 2: 
 		deleteMovie(movie, arrSize);
