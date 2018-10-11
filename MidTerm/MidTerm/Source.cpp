@@ -4,8 +4,8 @@
 #include <string> //needed for string variable
 #include <fstream> //file handling
 #include <sstream> //used for string bufffer
-#include <vector>
-#include <regex>
+#include <vector> //needed for vectors
+#include <regex> //needed for regular expressions
 
 
 
@@ -22,22 +22,22 @@ const int MAXMOVIES = 500; //Maximum size of database
 */
 
 //Functions
-void deleteMovie(string[][NUMFIELDS], int, int &); //Delete movie from array
+void deleteMovie(string*, int &); //Delete movie from array
 void loadDB(string arr[][NUMFIELDS], int &, string, int &, int &); //Read in file and load array
 vector<string> parseString(string , char ); //Split delimted string
 string getString(); //Get string input and validate
 string getString(string); //get string input and validate.  Pass string to match for validation
 int getInt(); //Get int input and validate
-char getChar(); //Get char input and validate
 int getInt(int, int); //get int input and validate range.
 void displayMenu(); //display main menu
 void addMovie(string *, int&, int &, int &); //Add movie
-void printMovies(string *,int,int,int); //print all movies in array
-void searchMenu(string[][NUMFIELDS], int); //Generates menu for searching the 2d array
+void printMovies(string *,int,int &, int ,int); //print all movies in array
+int searchMenu(); //Generates menu for searching the 2d array
 void updateDB(string*, string, int); //Writes changes to disk.
-vector<string> searchMovies(string[][NUMFIELDS], int, int);
+void searchMovies(string[][NUMFIELDS], int &,int,int);
 float getFloat(float, float);  // Get float input and validate.  Also checks range.
 void printTableSeperator(int, char); //Prints out seperator for table
+void movieActions(string *, int &);
 
 /*
 Programmer Name: Ben Scherer
@@ -63,10 +63,10 @@ int main() {
 		choice = getInt();
 		switch (choice) {
 		case 1:
-			printMovies(&movies[0][0], size,maxTitle,maxGenre);
+			printMovies(&movies[0][0], size,size,maxTitle,maxGenre);
 			break;
 		case 2:
-			
+			searchMovies(movies, size, maxTitle, maxGenre);
 			break;
 		case 3:
 			addMovie(&movies[size][0], size,maxTitle,maxGenre);
@@ -90,74 +90,140 @@ int main() {
 }
 
 
-void searchMenu(string movies[][NUMFIELDS], int size) {
-	int choice;
-	cout << "\n 1 - Search by Title\n"
+int searchMenu() {
+	cout << "\n1 - Search by Title\n"
 		<< "2 - Search by Year\n"
 		<< "3 - Search by Genre\n"
 		<< "4 - Search by Rating\n"
 		<< "5 - Quit\n"
 		<< "Enter Choice: ";
 
-	do {
-		choice = getInt();
-		if (choice >= 1 && choice < 5)
-			searchMovies(movies, size, choice);
-		else if (choice == 5)
-			return;
-		else
-			cout << "Invalid Choice.  Try again: ";
+	return getInt(1,5);
 
-
-	} while (choice != 5);
-
+	   
 }
 
-vector<string> searchMovies(string movies[][NUMFIELDS],int size,int choice) {
-	vector<string> searchResult;
-	return searchResult;;
+void searchMovies(string movies[][NUMFIELDS],int &size,int maxTitle, int maxGenre) {
+	int choice = searchMenu();
+	int intToMatch;
+	vector<string *> searchResult;
+	string strToMatch; 
+	
+
+	switch (choice) {
+	case 1 :
+		cout << "Enter search string: ";
+		strToMatch = getString();
+		break;
+	case 2:
+		cout << "Enter Year to Search: ";
+		strToMatch = getString("^\\d{4}$");
+		break;
+	case 3:
+		cout << "Enter Genre to Search: ";
+		strToMatch = getString();
+		break;
+	case 4:
+		cout << "Enter number from 1 - 10: ";
+		 intToMatch = getInt(1,10);
+		break;
+	case 5:
+		return;
+	}
+
+	regex strRegEx(strToMatch, regex_constants::icase | regex_constants::ECMAScript); //Regex pattern to validate input
+
+	for (int i = 0; i < size; i++) {
+			switch (choice) {
+			case 1: 
+				if (regex_match(movies[i][0],strRegEx))
+					searchResult.push_back(&movies[i][0]);
+				break;
+			case 2:
+				if (movies[i][1] == strToMatch)
+					searchResult.push_back(&movies[i][0]);
+				break;
+			case 3:
+				if (regex_match(movies[i][2], strRegEx))
+					searchResult.push_back(&movies[i][0]);
+				break;
+			case 4:
+				if (stoi(movies[i][1]) == stoi(strToMatch))
+					searchResult.push_back(&movies[i][0]);
+				break;
+			}
+		
+	}
+	cout << endl;
+	if (searchResult.size() == 0) {
+		cout << "\nNo matches found\n";
+		return;
+	}
+
+	printMovies(searchResult[0], searchResult.size(), size,maxTitle, maxGenre);
+	
 }
-void printMovies(string *arr, int size, int maxTitle, int maxGenre) {
+
+
+void printMovies(string *arr, int printSize, int &arrSize,int maxTitle, int maxGenre) {
+	
+	
 	int numSeperator =  3 + maxGenre + maxTitle + 4 + 6 + 5; //number of chars to use for table seperator. maxGenre + maxTitle + year + rating + number of seperators
 	
 	printTableSeperator(numSeperator, '-');
 	cout << endl << left << "|" << setw(3) << "Id" << "|" << setw(maxTitle) << "Title" << "|" << setw(4) << "Year" << "|" <<  setw(maxGenre) << "Genre" << "|" << setw(6) << "Rating" << "|" << endl; //header for table
 	printTableSeperator(numSeperator, '-');
-	for (int i = 0; i < size; i++) {
-		/*cout << left;
-		for (int j = 0; j < NUMFIELDS; j++) {
-			cout << setw(30) << *(arr+ (i*NUMFIELDS) + j);
-		}
-		cout << endl;
-		*/
+	for (int i = 0; i < printSize; i++) {
+
 		cout << "|" <<  left << setw(3) << i << "|" << setw(maxTitle) << *(arr + (i*NUMFIELDS)) << "|" << setw(4) << *(arr + (i*NUMFIELDS) + 1) << "|" << setw(maxGenre) << *(arr + (i*NUMFIELDS) + 2) << "|" << setw(6) << *(arr + (i*NUMFIELDS) + 3) << "|" << endl;
 		printTableSeperator(numSeperator, '-');
 		
 	}
 	
 	cout << endl;
+	if (printSize == 0)
+		return;
+
 	string choice;
+	bool isValid = false;
 	do {
 		cout << "Enter Movie ID to update/delete(Q to quit):";
-			
-			
 		choice = getString();
-
 		
-		//cout << choice << endl;
-		if (choice == "q" || choice == "Q")
-			return; 
-
-		if (stoi(choice) >= 0 && stoi(choice) < size )
-			cout << endl;
-		else
+		try {
+			if (choice == "q" || choice == "Q")
+				return;
+			else if (stoi(choice) >= 0 && stoi(choice) < printSize)
+				isValid = true;
+			else
+				cout << "\nError - Invalid Input.  Try Again\n";
+		}
+		catch (exception e) {
 			cout << "\nError - Invalid Input.  Try Again\n";
+		}
 
+	} while (!isValid);
 
-	} while (true);
+	movieActions((arr + (stoi(choice) * NUMFIELDS)), arrSize);
 }
 
-void movieMenu() {
+void movieActions(string *movie,int &arrSize) {
+	cout << "1 - Update Movie\n"
+		<< "2 - Delete Movie\n"
+		<< "3 - Quit\n";
+	cout << "Enter Choice: ";
+	int choice = getInt(1, 3);
+	
+
+	switch (choice) {
+	case 1: 
+		break;
+	case 2: 
+		deleteMovie(movie, arrSize);
+	}
+	cout << endl;
+
+
 
 }
 
@@ -214,8 +280,9 @@ int getInt() {
 	do {
 		cin >> intHolder;
 		if (cin.fail()) {
-			cin.clear();
 			cout << "\nYou have entered invalid input.  Try Again\n";
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 		else
 			isValid = true;
@@ -226,25 +293,6 @@ int getInt() {
 
 }
 
-char getCharChoice() {
-	cin.clear();
-	char holder; //temporary variable for getlne
-	bool isValid = false;
-
-	do {
-		cin >> holder;
-		if (cin.fail()) {
-			cin.clear();
-			cout << "\nYou have entered invalid input.  Try Again\n";
-		}
-		else
-			isValid = true;
-	} while (!isValid);
-	cin.clear();
-	cin.ignore();
-	return holder;
-
-}
 
 
 int getInt(int low, int high) {
@@ -255,8 +303,10 @@ int getInt(int low, int high) {
 	do {
 		cin >> intHolder;
 		if (cin.fail() || intHolder < low || intHolder > high) {
-			cin.clear();
 			cout << "\nYou have entered invalid input.  Try Again\n";
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			
 		}
 		else
 			isValid = true;
@@ -275,8 +325,9 @@ float getFloat(float low, float high) {
 	do {
 		cin >> tmpHolder;
 		if (cin.fail() || tmpHolder < low || tmpHolder > high) {
-			cin.clear();
 			cout << "\nYou have entered invalid input.  Try Again\n";
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 		else
 			isValid = true;
@@ -295,8 +346,9 @@ string getString() {
 	do {
 		getline(cin,strHolder);
 		if (cin.fail()) {
-			cin.clear();
 			cout << "\nYou have entered invalid input.  Try Again\n";
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 		else
 			isValid = true;
@@ -315,8 +367,9 @@ string getString(string strToMatch) {
 	do {
 		getline(cin, strHold);
 		if (cin.fail() || !regex_match(strHold,strRegEx)) {
-			cin.clear();
 			cout << "\nYou have entered invalid input.  Try Again\n";
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 		else
 			isValid = true;
@@ -326,19 +379,23 @@ string getString(string strToMatch) {
 
 }
 
-void deleteMovie(int arr[][NUMFIELDS], int index, int &size) {
-
-	for (int i = index; i < size; i++) {
-		for (int j = 0; j < NUMFIELDS; j++) {
-			arr[i][j] = arr[i + 1][j];
+void deleteMovie(string *arr, int &size) {
+	size--;
+	string *lastElement = arr + (size * NUMFIELDS - 1); //Last ptr in array
+	//No point in this, since the memory is already allocated.
+	/*cout << arr << "\t" << *arr << endl;
+	for (int i = 0; i < NUMFIELDS; i++) {//Null out values to "Delete" Them.
+		cout << (arr + i) << "\t" << *(arr + i) << endl;
+		*(arr + i) = nullptr;
+	}
+	*/
+	//Shift all element of array.
+	for (arr; (lastElement - arr) >= 0; arr += NUMFIELDS)
+	{
+		for (int i = 0; i < NUMFIELDS; i++) {
+			*(arr + i) = *(arr + (NUMFIELDS + i));
 		}
 	}
-	for (int i = 0; i < NUMFIELDS; i++) {
-		arr[size - 1][i] = NULL;
-	}
-	size -= NUMFIELDS;
-
-
 }
 
 void loadDB (string arr[][NUMFIELDS], int &size, string filePath, int &maxTitle, int &maxGenre) {
