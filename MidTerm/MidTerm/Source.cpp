@@ -104,9 +104,7 @@ int searchMenu() {
 
 	return getInt(1,5);
 
-
-
-	   
+	   	   
 }
 
 /*
@@ -138,7 +136,7 @@ void updateMovie(string *arr,int &maxTitle,int &maxGenre) {
 		case 1:
 			cout << "Enter title of movie: ";
 			*arr = getString();;
-			if ((*arr).size() > maxTitle)
+			if (arr->size() > maxTitle)
 				maxTitle = (*arr).size();
 			break;
 
@@ -149,7 +147,7 @@ void updateMovie(string *arr,int &maxTitle,int &maxGenre) {
 		case 3:
 			cout << "\nEnter genre of movie: ";
 			*(arr + 2) = getString();
-			if ((*(arr + 2)).size() > maxGenre)
+			if ((arr + 2)->size() > maxGenre)
 				maxGenre = (*(arr + 2)).size();
 			break;
 		case 4:
@@ -215,7 +213,7 @@ void searchMovies(string movies[][NUMFIELDS],int &size,int maxTitle, int maxGenr
 	for (int i = 0; i < size; i++) {
 			switch (choice) {
 			case 1: 
-				cout << movies[i][0] << endl;
+				//cout << movies[i][0] << endl;
 				if (regex_match(movies[i][0],strRegEx))
 					searchResult.push_back(&movies[i][0]);
 				break;
@@ -434,9 +432,9 @@ void addMovie(string *arr, int &size, int &maxTitle, int &maxGenre) {
 	*(arr + 3) = rating;
 	cout << endl << endl;
 
-	if ((*arr).size() > maxTitle)
+	if (arr->size() > maxTitle)
 		maxTitle = (*arr).size();
-	if ((*(arr + 2)).size() > maxGenre)
+	if ((arr + 2)->size() > maxGenre)
 		maxGenre = (*(arr + 2)).size();
 
 	size++;
@@ -454,7 +452,7 @@ void displayMenu() {
 	cout << "\n1 - Print Movie Database\n";
 	cout << "2 - Search Movie Database\n";
 	cout << "3 - Add Movie\n";
-	cout << "5 - Sort Database\n";
+	cout << "4 - Sort Database\n";
 	cout << "5 - Quit\n";
 	cout << "Enter choice: ";
 }
@@ -630,7 +628,7 @@ Function Return Value: n/a
 void deleteMovie(string *arr, int &size) {
 	size--;
 	string *lastElement = arr + (size * NUMFIELDS - 1); //Last ptr in array
-	
+	cout << "Deleting: " << *arr << endl;
 	for (int i = 0; i < NUMFIELDS; i++) {//clear out values to "Delete" Them.  Memory is already allocated, so this is more a psuedo delete
 		*(arr + i) = "";
 	}
@@ -642,6 +640,7 @@ void deleteMovie(string *arr, int &size) {
 			*(arr + i) = *(arr + (NUMFIELDS + i));
 		}
 	}
+	
 }
 
 
