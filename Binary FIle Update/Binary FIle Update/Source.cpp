@@ -37,8 +37,9 @@ int main() {
 	//Create fstream
 	string fileName = "inventory.dat";
 	// To modify file use ios::in|ios::out.  TO append to ios::out|ios::app.  Ios:in|ios:app not compat
-	fstream inventory(fileName, ios::binary | ios::in | ios::out);;
-	if (!inventory) {
+
+	fstream inventory("Inventory.dat",ios::in | ios::app | ios::binary);
+if (!inventory.is_open()) {
 		cout << "Error: Unable to open inventory.dat. Exiting program\n";
 		cin.get();
 		return 1;
@@ -100,11 +101,13 @@ void printFile(fstream &file) {
 	int counter = 0;
 	file.clear();
 	cout << left << setw(15) << "Product Number" << setw(40) << "Product Name" << setw(10) << "Price" << setw(10) << "Quantity" << endl;
-	while (file.read(reinterpret_cast<char *>(&tmpProduct), readSize)) {
-		counter++;
-		file.seekg(readSize * counter);
-		
+	file.seekg(sizeof(tmpProduct), ios::beg);
+	while (!file.eof()) {
+
+		file.seekg(readSize * counter,ios::beg);
+		file.read(reinterpret_cast<char *>(&tmpProduct), readSize);
 		cout << left << setw(15) << tmpProduct.prodNum << setw(40) << tmpProduct.prodName << setw(10) << tmpProduct.price << setw(10) << tmpProduct.qty << endl;
+		counter++;
 	}
 
 
@@ -123,7 +126,7 @@ void displayRecord(fstream &file) {
 
 }
 
-/*
+/* 
 Purpose : Modify single record in file
 Input Parameters :
 I/O Parameters : 
