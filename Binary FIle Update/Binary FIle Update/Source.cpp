@@ -23,6 +23,8 @@ int getInt(int, int); //Get int input and validate based on range
 int getInt(); //Get int input and validate
 void addRecord(fstream&); //Add record to file.d
 double getDouble(); // gets double input and validates
+long getLong();
+void openFile(fstream&,string);
 
 
 /*
@@ -36,9 +38,9 @@ int main() {
 	int choice; 
 	//Create fstream
 	string fileName = "inventory.dat";
-	// To modify file use ios::in|ios::out.  TO append to ios::out|ios::app.  Ios:in|ios:app not compat
+	fstream inventory;
 
-	fstream inventory("Inventory.dat",ios::in | ios::app | ios::binary);
+	openFile(inventory, fileName);
 if (!inventory.is_open()) {
 		cout << "Error: Unable to open inventory.dat. Exiting program\n";
 		cin.get();
@@ -63,7 +65,18 @@ if (!inventory.is_open()) {
 	return 0;
 }
 
-
+void openFile(fstream &file, string fileName) {
+	file.open(fileName, ios::in | ios::binary);
+	//If file does not exist, add trunc flag to set file to zero
+	if (!file.is_open()) {
+		file.close();
+		file.open(fileName, ios::binary | ios::in | ios::out | ios::trunc);
+	}
+	else {
+		file.close();
+		file.open(fileName, ios::binary | ios::in | ios::out );
+	}
+}
 /*
 Purpose : Displays Menu and validates input
 Input Parameters :n/a
@@ -100,14 +113,24 @@ void printFile(fstream &file) {
 	int readSize = sizeof(tmpProduct);
 	int counter = 0;
 	file.clear();
-	cout << left << setw(15) << "Product Number" << setw(40) << "Product Name" << setw(10) << "Price" << setw(10) << "Quantity" << endl;
-	file.seekg(sizeof(tmpProduct), ios::beg);
-	while (!file.eof()) {
 
-		file.seekg(readSize * counter,ios::beg);
-		file.read(reinterpret_cast<char *>(&tmpProduct), readSize);
+	//Check if file zero byes
+	//file.seekg(0, ios::end);
+	//if (file.tellg() == 0) {
+	//	cout << "Empty file, returning\n";
+	//	return;
+//	}
+
+	cout << left << setw(15) << "Product Number" << setw(40) << "Product Name" << setw(10) << "Price" << setw(10) << "Quantity" << endl;
+	file.seekg(0, ios::beg);
+	file.read(reinterpret_cast<char *>(&tmpProduct), readSize);
+	while (!file.eof()) {
+		
 		cout << left << setw(15) << tmpProduct.prodNum << setw(40) << tmpProduct.prodName << setw(10) << tmpProduct.price << setw(10) << tmpProduct.qty << endl;
+		file.read(reinterpret_cast<char *>(&tmpProduct), readSize);
+		
 		counter++;
+		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);
 	}
 
 
@@ -152,7 +175,7 @@ void addRecord(fstream &file) {
 
 	cout << "Add Record\n";
 	cout << "Enter Product Number: ";
-	p.prodNum = getInt();
+	p.prodNum = getLong();
 	cout << "\nEnter prduct name: ";
 	cin.getline(p.prodName, DESC_SIZE);
 	cout << "\nEnter Price: ";
@@ -239,6 +262,34 @@ Function Return Value:
 double getDouble() {
 	cin.clear();
 	double tmpHolder; //temporary variable for getlne
+	bool isValid = false;
+
+	do {
+		cin >> tmpHolder;
+		if (cin.fail()) {
+			cout << "\nYou have entered invalid input.  Try Again\n";
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+		else
+			isValid = true;
+	} while (!isValid);
+	cin.clear();
+	cin.ignore();
+	return tmpHolder;
+
+}
+/*
+Purpose : Gets long input and validates
+Input Parameters : n/a
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value:
+	int tnoHolder - float to validate input against
+*/
+long getLong() {
+	cin.clear();
+	long tmpHolder; //temporary variable for getlne
 	bool isValid = false;
 
 	do {
