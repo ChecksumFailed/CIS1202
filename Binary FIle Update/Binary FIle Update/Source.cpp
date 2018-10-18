@@ -23,8 +23,8 @@ int getInt(int, int); //Get int input and validate based on range
 int getInt(); //Get int input and validate
 void addRecord(fstream&); //Add record to file.d
 double getDouble(); // gets double input and validates
-long getLong();
-void openFile(fstream&,string);
+long getLong(); //get long input and validate
+void openFile(fstream&,string); //open file. checks to see if file exists first.
 
 
 /*
@@ -35,13 +35,12 @@ Date : 10/14/2018
 Program Description : Binary file manipulation program. Peforms Read/Modify operations
 */
 int main() {
-	int choice; 
-	//Create fstream
-	string fileName = "inventory.dat";
-	fstream inventory;
+	int choice; //int for choice menu
+	string fileName = "inventory.dat"; //filename to use
+	fstream inventory; ////file stream object for program
 
-	openFile(inventory, fileName);
-if (!inventory.is_open()) {
+	openFile(inventory, fileName); //open file
+	if (!inventory.is_open()) { // if error, exit program
 		cout << "Error: Unable to open inventory.dat. Exiting program\n";
 		cin.get();
 		return 1;
@@ -59,23 +58,29 @@ if (!inventory.is_open()) {
 	} while (choice != 5);
 
 
-	if (inventory.is_open())
+	if (inventory.is_open()) //if file is open, close
 		inventory.close();
 
 	return 0;
 }
 
+/*
+Purpose : Opens and validates file stream
+Input Parameters : 
+	string fileame - name of file to open
+I/O Parameters : 
+	fstream file - fstream object leveraged by all functions
+Output Parameters : n/a	
+Function Return Value: n/a
+*/
 void openFile(fstream &file, string fileName) {
-	file.open(fileName, ios::in | ios::binary);
+	file.open(fileName, ios::binary | ios::in | ios::out);
 	//If file does not exist, add trunc flag to set file to zero
 	if (!file.is_open()) {
 		file.close();
 		file.open(fileName, ios::binary | ios::in | ios::out | ios::trunc);
 	}
-	else {
-		file.close();
-		file.open(fileName, ios::binary | ios::in | ios::out );
-	}
+	
 }
 /*
 Purpose : Displays Menu and validates input
@@ -109,26 +114,17 @@ Output Parameters : Description of reference parameters that receive their initi
 Function Return Value: n/a
 */
 void printFile(fstream &file) {
-	Product tmpProduct;
-	int readSize = sizeof(tmpProduct);
-	int counter = 0;
+	Product tmpProduct; //temporary variable to store data from read
+	int counter = 0; //counter to display record number
 	file.clear();
-
-	//Check if file zero byes
-	//file.seekg(0, ios::end);
-	//if (file.tellg() == 0) {
-	//	cout << "Empty file, returning\n";
-	//	return;
-//	}
-
-	cout << left << setw(15) << "Product Number" << setw(40) << "Product Name" << setw(10) << "Price" << setw(10) << "Quantity" << endl;
-	file.seekg(0, ios::beg);
-	file.read(reinterpret_cast<char *>(&tmpProduct), readSize);
+	
+	cout << left << setw(15) << "Record Number" <<  setw(15) << "Product Number" << setw(DESC_SIZE) << "Product Name" << setw(10) << "Price" << setw(10) << "Quantity" << endl;
+	file.seekg(0, ios::beg); //seek to beginning of file
+	file.read(reinterpret_cast<char *>(&tmpProduct), sizeof(tmpProduct)); //read in first line to check if at eof
 	while (!file.eof()) {
 		
-		cout << left << setw(15) << tmpProduct.prodNum << setw(40) << tmpProduct.prodName << setw(10) << tmpProduct.price << setw(10) << tmpProduct.qty << endl;
-		file.read(reinterpret_cast<char *>(&tmpProduct), readSize);
-		
+		cout << left << setw(15) << counter << setw(15) << tmpProduct.prodNum << setw(DESC_SIZE) << tmpProduct.prodName << setw(10) << tmpProduct.price << setw(10) << tmpProduct.qty << endl;
+		file.read(reinterpret_cast<char *>(&tmpProduct), sizeof(tmpProduct));
 		counter++;
 		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);
 	}
@@ -140,25 +136,105 @@ void printFile(fstream &file) {
 /*
 Purpose :  Print single record from file
 Input Parameters :
+	int recordNum - stores input from user
+I/O Parameters : 
 	fstream file - File stream object
-I/O Parameters : Description of reference parameters that have one value upon entering the routine and different value upon leaving the routine
 Output Parameters : Description of reference parameters that receive their initial value inside the function
 Function Return Value: n/a
 */
 void displayRecord(fstream &file) {
+
+	Product tmpProduct;//temporary variable to store data from read
+	
+	file.clear();
+	file.seekg(ios::beg);
+	
+	cout << "Enter the record number to display: ";
+	int recordNum = getInt();
+	cout << endl;
+
+	file.seekg(recordNum * sizeof(tmpProduct), ios::beg);
+
+	file.read(reinterpret_cast<char *>(&tmpProduct), sizeof(tmpProduct));
+
+	if (file.fail()) {
+		cerr <<"Error: Not a valid record number\n";
+		return;
+	}
+
+	cout << left << setw(15) << "Product Num: " << tmpProduct.prodNum << endl;
+	cout << left << setw(15) << "Product Name: " << tmpProduct.prodName << endl;
+	cout << left << setw(15) << "Price: " << tmpProduct.price << endl;
+	cout << left << setw(15) << "Quantity: " << tmpProduct.qty << endl;
+
 
 }
 
 /* 
 Purpose : Modify single record in file
 Input Parameters :
+	int choice - used for menu loop
+	int recordNum - stores record number inputed by user
 I/O Parameters : 
 		fstream file - File stream object
 Output Parameters : Description of reference parameters that receive their initial value inside the function
 Function Return Value: n/a
 */
 void modifyRecord(fstream &file) {
+	Product tmpProduct;
+	int choice; 
 
+	file.clear(); //clear eof flag
+	file.seekg(ios::beg); //seek to beginning of file
+
+	cout << "Enter the record number to modify: ";
+	int recordNum = getInt();
+	cout << endl;
+
+	file.seekg(recordNum * sizeof(tmpProduct), ios::beg); //seek to record
+	file.read(reinterpret_cast<char *>(&tmpProduct), sizeof(tmpProduct)); //attempt to read
+	if (file.fail()) { //exit if read failure
+		cerr << "Error: Not a valid record number\n";
+		return;
+	}
+
+	//loop until user quits
+	do {
+		cout << endl;
+		cout <<  "1 - Product Num(" << tmpProduct.prodNum  << ")" << endl;
+		cout <<  "2 - Product Name(" << tmpProduct.prodName << ")" << endl;
+		cout  <<  "3 - Price:(" << tmpProduct.price << ")" << endl;
+		cout  <<  "4 - Quantity:(" << tmpProduct.qty << ")" << endl;
+		cout  <<  "5 - Quit\n";
+		cout  <<   "Enter field to modify or 5 to quit: ";
+		choice = getInt(1, 5);
+
+		switch (choice) {
+		case 1:
+			cout << "Enter new Product Number: ";
+			tmpProduct.prodNum = getLong();
+			break;
+		case 2:
+			cout << "Enter new Product Name: ";
+			cin.getline(tmpProduct.prodName, DESC_SIZE);
+			break;
+		case 3:
+			cout << "Enter new Price: ";
+			tmpProduct.price = getDouble();
+			break;
+		case 4:
+			cout << "Enter new Quantity: ";
+			tmpProduct.qty = getInt();
+			break;
+		}
+	} while (choice != 5);
+
+	file.seekg(recordNum * sizeof(tmpProduct), ios::beg); //seek to record
+	file.write(reinterpret_cast<char *>(&tmpProduct), sizeof(tmpProduct)); //write updated record to file
+	if (file.fail()) {
+		cerr << "Error: Unable to write data to file\n";
+		return;
+	}
 }
 
 /*
@@ -170,22 +246,26 @@ Output Parameters : Description of reference parameters that receive their initi
 Function Return Value: n/a
 */
 void addRecord(fstream &file) {
-	Product p;
+	Product tmpProduct;
 	file.clear();
 
 	cout << "Add Record\n";
 	cout << "Enter Product Number: ";
-	p.prodNum = getLong();
+	tmpProduct.prodNum = getLong();
 	cout << "\nEnter prduct name: ";
-	cin.getline(p.prodName, DESC_SIZE);
+	cin.getline(tmpProduct.prodName, DESC_SIZE);
 	cout << "\nEnter Price: ";
-	p.price = getDouble();
+	tmpProduct.price = getDouble();
 	cout << "\nEnter Quantity: ";
-	p.qty = getInt();
+	tmpProduct.qty = getInt();
 
 	//file.seekg(ios::end); //Go to end of file
-	file.write(reinterpret_cast<char *>(&p), sizeof(p));
-	cout << "\nAdded " << p.prodName << endl;
+	file.write(reinterpret_cast<char *>(&tmpProduct), sizeof(tmpProduct));
+	if (file.fail()) {
+		cerr << "Error: Unable to write data to file\n";
+		return;
+	}
+	cout << "\nAdded " << tmpProduct.prodName << endl;
 
 }
 
