@@ -6,17 +6,10 @@ BookClass::BookClass()
 {
 }
 
-/*
-	string title;
-	string author;
-	string publisher;
-	string isbn;
-	double price;
-	int year;
-	int numInStock;*/
 
 //Mutators
 void BookClass::storeBook(string bookTitle, string authorName, string bookPublisher, string bookISBN, double bookPrice, int bookYear, int booksInStock) {
+
 	title = bookTitle;
 	author = authorName;
 	publisher = bookPublisher;
@@ -27,24 +20,49 @@ void BookClass::storeBook(string bookTitle, string authorName, string bookPublis
 
 }
 
+
+/*
+Purpose : Checks out copy of book.  Delimts one from stock
+Input Parameters : n/a
+I/O Parameters : 
+	numInStock - Number of book in stock
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void BookClass::checkOutBook() {
 	if (numInStock > 0) {
 		numInStock--;
-		cout << "Checked out one copy of " << title << endl;
+		cout << "\nChecked out one copy of " << title << endl;
 	}
 	else {
-		cout << "Error: No copies of " << title << " in stock.";
+		cout << "\nError: No copies of " << title << " in stock.";
  	}
 
 }
-
+/*
+Purpose : Checks out copy of book.  adds one to stock
+Input Parameters : n/a
+I/O Parameters :
+	numInStock - Number of book in stock
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void BookClass::returnBook() {
 	numInStock++;
+	cout << "\nReturned copy of " << title << endl;
 }
 
 //accessors
 
+/*
+Purpose : Prints information about object
+Input Parameters : n/a
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void BookClass::displayBookInfo() {
+
 	cout << endl <<setw(20) << "Title: " << title << endl;
 	cout << setw(20) << "Author: " << author << endl;
 	cout << setw(20) << "Publisher: " << publisher << endl;
@@ -55,11 +73,25 @@ void BookClass::displayBookInfo() {
 	
 }
 
-
+/*
+Purpose : returns the number of books in stock
+Input Parameters : n/a
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: 
+	numInStock - number of books in stock
+*/
 int BookClass::getNumInStock() {
 	return numInStock;
 }
-
+/*
+Purpose : returns the title of book
+Input Parameters : n/a
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value:
+	title - Title of book
+*/
 string BookClass::getTitle() {
 	return title;
 }

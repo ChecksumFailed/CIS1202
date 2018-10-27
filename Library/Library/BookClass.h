@@ -10,13 +10,13 @@ using namespace std;
 class BookClass
 {
 private:
-	string title;
-	string author;
-	string publisher;
-	string isbn;
-	double price;
-	int year;
-	int numInStock;
+	string title = "";
+	string author = "";
+	string publisher = "";
+	string isbn = "";
+	double price = 0;
+	int year = 0;
+	int numInStock = 0;
 
 public:
 	//Constructors

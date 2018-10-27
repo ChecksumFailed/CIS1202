@@ -115,6 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BenUtils.h" />
+    <ClInclude Include="BookClass.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BenUtils.cpp" />
+    <ClCompile Include="BookClass.cpp" />
+    <ClCompile Include="BookMain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
