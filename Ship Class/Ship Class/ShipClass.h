@@ -1,5 +1,5 @@
-#ifndef SHIPCLASS.H
-#define SHIPCLASS.H
+#ifndef SHIPCLASS_H
+#define SHIPCLASS_H
 
 
 #include <string>
@@ -13,16 +13,16 @@ class ShipClass
 {
 
 private:
-	string ship;
+	string name;
 	int year;
 
 public:
 	ShipClass(); //default constructor
 	ShipClass(string, int); //constructor with params
 	~ShipClass(); //default deconstructor
-	string getShip(); //Return ship name
+	string getName(); //Return ship name
 	int getYear(); // Return Year ship was build
-	void setShip(string); //Set name
+	void setName(string); //Set name
 	void setYear(int); //set year
 	virtual void print(); 
 };
@@ -36,7 +36,7 @@ ShipClass::ShipClass()
 //Constructer with param
 ShipClass::ShipClass(string shipStr,int yearInt)
 {
-	ship = shipStr;
+	name = shipStr;
 	year = yearInt;
 }
 //Default deconstrudtor
@@ -45,16 +45,16 @@ ShipClass::~ShipClass()
 }
 
 //Getter function
-string ShipClass::getShip() { return ship; }
+string ShipClass::getName() { return name; }
 int ShipClass::getYear() { return year; }
 
 //Setter Functions
-void ShipClass::setShip(string ship) { this->ship = ship; }
+void ShipClass::setName(string ship) { this->name = ship; }
 void ShipClass::setYear(int year) { this->year = year; }
 
 void ShipClass::print() {
-	cout << setw(15) << "Ship Name: " << this->ship << endl;
-	cout << setw(15) << "Year Built: " << this->year << endl;
+	cout  << "\nShip Name: " << this->name << endl;
+	cout << "Year Built: " << this->year << endl;
 }
 
-#endif // !SHIPCLASS.H
+#endif // !SHIPCLASS_H

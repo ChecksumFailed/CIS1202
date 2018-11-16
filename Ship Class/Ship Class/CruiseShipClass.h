@@ -1,5 +1,5 @@
-#ifndef CRUISESHIP.H
-#define CRUISESHIP.H
+#ifndef CRUISESHIPCLASS_H
+#define CRUISESHIPCLASS_H
 
 
 
@@ -40,4 +40,4 @@ void CruiseShip::print() {
 	cout << "Max Passenger: " << this->maxPassenger << endl;
 }
 
-#endif // !CRUISESHIP.H
+#endif // !CRUISESHIPCLASS.H

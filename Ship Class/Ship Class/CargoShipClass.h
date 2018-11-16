@@ -1,19 +1,19 @@
-#ifndef CARGOSHIPCLASS.h
-#define CARGOSHIPCLASS.h
+#ifndef CARGOSHIPCLASS_H
+#define CARGOSHIPCLASS_H
 
 
 
 
 #pragma once
 #include "ShipClass.h"
-class CargoShipClass :public ShipClass
+class CargoShip :public ShipClass
 {
 	private:
 		int capacity;
 	public:
-		CargoShipClass();
-		CargoShipClass(int);
-		~CargoShipClass();
+		CargoShip();
+		CargoShip(int);
+		~CargoShip();
 		int getCapacity();
 		void setCapacity(int);
 		virtual void print();
@@ -21,19 +21,19 @@ class CargoShipClass :public ShipClass
 
 
 //Constructors
-CargoShipClass::CargoShipClass()
+CargoShip::CargoShip()
 {
 }
 
-CargoShipClass::CargoShipClass(int capacity) { this->capacity = capacity; }
+CargoShip::CargoShip(int capacity) { this->capacity = capacity; }
 
 //Deconstructor
-CargoShipClass::~CargoShipClass(){}
+CargoShip::~CargoShip(){}
 
-int CargoShipClass::getCapacity() { return this->capacity; }
-void CargoShipClass::setCapacity(int capacity) { this->capacity = capacity; }
+int CargoShip::getCapacity() { return this->capacity; }
+void CargoShip::setCapacity(int capacity) { this->capacity = capacity; }
 
-void CargoShipClass::print() {
+void CargoShip::print() {
 	ShipClass::print();
 	cout << "Capacity: " << this->capacity << endl;
 }

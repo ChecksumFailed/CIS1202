@@ -115,6 +115,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BenUtils.h" />
+    <ClInclude Include="CargoShipClass.h" />
+    <ClInclude Include="CruiseShipClass.h" />
+    <ClInclude Include="ShipClass.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BenUtils.cpp" />
+    <ClCompile Include="ShipMain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
