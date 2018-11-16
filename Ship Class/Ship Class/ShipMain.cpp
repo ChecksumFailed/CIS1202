@@ -13,7 +13,13 @@ void getShip(ShipClass &);
 void getCruiseShip(CruiseShip &);
 void getCargoShip(CargoShip &);
 
-
+/*
+Programmer Name: Ben Scherer
+Program # : 12
+Course: CIS 1202 Section 502
+Date : 11/15/2018
+Program Description : Ship Class. Utilizes custom classes, inheritance and virtual functions.
+*/
 int main() {
 	
 	//Create ship object
@@ -37,6 +43,15 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
+
+/*
+Purpose : Validates Input and updates ship object
+Input Parameters : n/a
+I/O Parameters : 
+	ShipClass &ship - ShipClass object
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void getShip(ShipClass &ship) {
 
 	cout << "Please Enter Ship Name: ";
@@ -50,7 +65,14 @@ void getShip(ShipClass &ship) {
 
 }
 
-
+/*
+Purpose : Validates Input and updates ship object
+Input Parameters : n/a
+I/O Parameters :
+	CruiseShip &ship - ShipClass object
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void getCruiseShip(CruiseShip &ship) {
 	
 	cout << "Please Enter Ship Name: ";
@@ -65,8 +87,16 @@ void getCruiseShip(CruiseShip &ship) {
 	cout << endl;
 	
 
-}
 
+}
+/*
+Purpose : Validates Input and updates ship object
+Input Parameters : n/a
+I/O Parameters :
+	CargoShip &ship - ShipClass object
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void getCargoShip(CargoShip &ship) {
 	
 	cout << "Please Enter Ship Name: ";
