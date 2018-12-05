@@ -56,7 +56,7 @@ void Display::setSize(int size) {
 }
 
 
-void print() {
+void Display::print() {
 
 }
  

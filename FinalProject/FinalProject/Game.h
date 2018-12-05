@@ -32,4 +32,4 @@ Game::~Game()
 
 string Game::getPlatform() { return this->platform; }
 void Game::setPlatform(string platform) {this->platform = platform; }
-void print();
+void Game::print() {}

@@ -21,9 +21,7 @@ public:
 	string getResolution();
 	string getBrand();
 	int getSize();
-
-
-
+	
 
 	//setters
 	void setSize(int);

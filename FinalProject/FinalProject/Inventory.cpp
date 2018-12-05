@@ -66,9 +66,9 @@ void Inventory::setDepreciationYears(int years){
 
 
 double Inventory::calculateDepreciation() {
-	int salvagePrice = this->purchasePrice * this->depreciationRate;
+	double salvagePrice = this->purchasePrice * this->depreciationRate;
 	double dAmount = (this->purchasePrice - salvagePrice) / this->depreciationYears;
-	double dValue = (this->purchasePrice - (dValue * (getCurrentYear() - this->yearPurchased)));
+	double dValue = (this->purchasePrice - (dAmount * (getCurrentYear() - this->yearPurchased)));
 	if (dValue < 0)
 		return 0;
 	else

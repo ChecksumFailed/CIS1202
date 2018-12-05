@@ -1,5 +1,6 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <string>
 #include <iostream>

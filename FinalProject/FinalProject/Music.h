@@ -31,6 +31,6 @@ Music::~Music()
 string Music::getArtist() { return this->artist; }
 void Music::setArtist(string artist) { this->artist = artist; }
 
-void print() {
+void Music::print() {
 
 }
