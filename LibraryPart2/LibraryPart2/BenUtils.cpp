@@ -110,7 +110,7 @@ bool isValid - Used to control loop until valid input is entered
 Function Return Value :
 string strHold - holds input from cin
 */
-string getString() {
+string  BenUtils::getString() {
 	cin.clear();
 	string strHolder; //temporary variable for getlne
 	bool isValid = false;
@@ -141,7 +141,7 @@ Function Return Value:
 	string strHold - holds input from cin
 */
 
-string getString(string strToMatch) {
+string BenUtils::getString(string strToMatch) {
 	cin.clear();
 	string strHold; //temporary variable for getlne
 	bool isValid = false;
@@ -161,3 +161,5 @@ string getString(string strToMatch) {
 	return strHold;
 
 }
+
+
