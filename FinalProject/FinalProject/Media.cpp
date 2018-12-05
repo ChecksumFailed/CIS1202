@@ -12,11 +12,12 @@ Media::Media(string name, double price, string location, int yearPurchased, stri
 	this->rating = rating;
 	this->year = year;
 	this->mediaType = mediaType;
+	iType = "Media";
 }
 
 Media::~Media()
 {
-
+	iType = "Media";
 }
 
 

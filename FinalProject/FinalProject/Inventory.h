@@ -22,8 +22,10 @@ private:
 	int depreciationYears = 5; //number of years in life of item.
 	double depreciationRate = 0.2;
 	double depreciationValue;
+	
 
 public:
+	string iType;//inventory type
 	Inventory();
 	Inventory(std::string, double, std::string, int);
 	~Inventory();

@@ -11,9 +11,11 @@ Display::Display(string name, double price, string location, int yearPurchased, 
 	this->type = type;
 	this->resolution = res;
 	this->brand = brand;
+	iType = "Display";
 }
 Display::~Display()
 {
+	iType = "Display";
 }
 
 

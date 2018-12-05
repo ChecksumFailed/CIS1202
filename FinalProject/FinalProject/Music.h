@@ -19,6 +19,7 @@ public:
 
 Music::Music()
 {
+	iType = "Music";
 }
 
 

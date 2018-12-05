@@ -4,12 +4,14 @@
 
 Inventory::Inventory()
 {
+	iType = "Inventory";
 }
 Inventory::Inventory(string name, double price, string location, int yearPurchased) {
 	this->name = name;
 	this->purchasePrice = price;
 	this->location = location;
 	this->yearPurchased = yearPurchased;
+	iType = "Inventory";
 
 	
 }

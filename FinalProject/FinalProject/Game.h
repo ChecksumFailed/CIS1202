@@ -22,6 +22,7 @@ public:
 
 Game::Game()
 {
+	iType = "Game";
 }
 
 

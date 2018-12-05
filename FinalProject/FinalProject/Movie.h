@@ -16,6 +16,7 @@ public:
 
 Movie::Movie()
 {
+	iType = "Movie";
 }
 
 
