@@ -9,15 +9,13 @@ class Display :public Inventory
 {
 private:
 	int size;
-	string type;
 	string resolution;
 	string brand;
 
 public:
 	Display();
-	Display(string, double, string, int, int, string, string, string);
+	Display(string, double, int, int,  string, string);
 	~Display();
-	string getType();
 	string getResolution();
 	string getBrand();
 	int getSize();
@@ -25,7 +23,6 @@ public:
 
 	//setters
 	void setSize(int);
-	void setType(string);
 	void setResolution(string);
 	void setBrand(string);
 

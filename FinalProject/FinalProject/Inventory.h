@@ -16,7 +16,7 @@ class Inventory
 private: 
 	std::string name; //name or descriptor of item
 	double purchasePrice; //purchase price of item
-	std::string location; //location of item.
+	
 	double depreciatedPrice; 
 	int yearPurchased; //year item purchased
 	//Assum 20% rate and 5 years of value. Calculates straight line depreciation for simplicity
@@ -28,28 +28,23 @@ private:
 public:
 	string iType;//inventory type
 	Inventory();
-	Inventory(std::string, double, std::string, int);
+	Inventory(std::string, double, int);
 	~Inventory();
+
 	//Getters
 	std::string getName();
 	double getPurchasePrice();
-	std::string getLocation();
-	double getDepreciatedPrice();
-	
 	int getYearPurchased();
 	int getDepreciationYears();
 
 	//setters
 	void setName(std::string);
 	void setPurchasePrice(double);
-	void setLocation(std::string);
-	void setDepreciatedPrice(double);
-	
 	void setYearPurchased(int);
 	void setDepreciationYears(int);
 
 	//math
-	double calculateDepreciation();
+	void calculateDepreciation();
 	int getCurrentYear();
 	virtual void print();
 

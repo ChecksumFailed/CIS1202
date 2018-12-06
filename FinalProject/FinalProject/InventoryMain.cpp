@@ -1,27 +1,47 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <cmath>
+#include <vector>
+//Custom Class for inventory program
 #include "Inventory.h"
-#include "Media.h"
+
 #include "Display.h"
 #include "Game.h"
 #include "Movie.h"
 #include "Music.h"
-#include <cmath>
+
 
 
 using namespace std;
 
+
+
 void displayMainMenu(); //Main Menu of program
-template <class T> T getInput();
-template <class T> T getInput(T,T);//checks against range
+template <class T> T getInput(); //gets and validates input
+template <class T> T getInput(T,T);//gets and validates input,checks against range
+void addItem(vector<Inventory *> &inv);
 
 int main() {
-
-	do {
+	vector<Inventory *> inventoryDB; //Inventory Vector to hold pointers to derived classes.
+	/*do {
 		displayMainMenu();
 		
-	} while (getInput(1, 6) != 6);
+	} while (getInput(1, 5) != 5);
+
+	*/
+
+	Music poo;
+	poo.setArtist("Bono");
+	poo.setGenre("Country");
+	poo.setMediaType("Digital");
+	poo.setName("Best of U2");
+	poo.setPurchasePrice(9.99);
+	poo.setRating(8.5);
+	poo.setYearPurchased(1999);
+	poo.setYear(1997);
+	poo.calculateDepreciation();
+	poo.print();
 
 
 	cout << "Press any key to exit";
@@ -34,11 +54,10 @@ int main() {
 void displayMainMenu() {
 	cout << "CIS 1202 Home Inventory Database\n\n";
 	cout << "1 - Print Inventory\n";
-	cout << "2 - Add Item\n";
-	cout << "3 - Modify Item\n";
-	cout << "4 - Delete Item\n";
-	cout << "5 - Search for Item\n";
-	cout << "6 - Quit\n";
+	cout << "2 - Print Inventory Summary(Count/Cost/Depreciation)\n";
+	cout << "3 - Search/Update/Delete Item\n";
+	cout << "4 - Add inventory item\n";
+	cout << "5 - Quit\n";
 	cout << "Please enter choice: ";
 	
 
@@ -105,4 +124,18 @@ T getInput(T low, T high) {
 	cin.ignore();
 	return tmpHolder;
 
+}
+
+
+void addItem(vector<Inventory *> &inv) {
+
+	//const string INVENTORY_TYPES[] = { "Display","Game","Movie","Music","Misc" };
+	cout << "1 - Display\n"
+		<< "2 - Game\n"
+		<< "3 - Movie\n"
+		<< "4 - Music\n"
+		<< "5 - Misc Item\n"
+		<< "6 - Exit\n"
+		<< "Choose and item: ";
+	int choice = getInput(1, 6);
 }

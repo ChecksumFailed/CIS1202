@@ -14,7 +14,7 @@ private:
 	string mediaType;
 public:
 	Media();
-	Media(std::string, double, std::string, int, string, float, int, string);
+	Media(std::string, double,  int, string, float, int, string);
 	~Media();
 
 	string getGenre();

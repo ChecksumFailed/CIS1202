@@ -10,6 +10,7 @@ private:
 public:
 	Movie();
 	~Movie();
+	virtual void print();
 };
 
 #endif
@@ -22,4 +23,8 @@ Movie::Movie()
 
 Movie::~Movie()
 {
+}
+
+void Movie::print() {
+	cout << "Runtime(Minutes): " << endl;
 }

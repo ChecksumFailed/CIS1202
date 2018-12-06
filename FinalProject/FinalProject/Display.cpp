@@ -6,9 +6,9 @@ Display::Display()
 {
 }
 
-Display::Display(string name, double price, string location, int yearPurchased, int size, string type, string res, string brand):Inventory(name,price,location,yearPurchased) {
+Display::Display(string name, double price, int yearPurchased, int size, string res, string brand):Inventory(name,price,yearPurchased) {
 	this->size = size;
-	this->type = type;
+	
 	this->resolution = res;
 	this->brand = brand;
 	iType = "Display";
@@ -20,9 +20,7 @@ Display::~Display()
 
 
 //getters
-string Display::getType() {
-	return this->type;
-}
+
 
 string Display::getResolution() {
 	return this->resolution;
@@ -39,9 +37,7 @@ int Display::getSize() {
 
 
 //setters
-void Display::setType(string type) {
-	this->type = type;
-}
+
 
 void Display::setResolution(string res) {
 	this->resolution = res;
@@ -57,6 +53,14 @@ void Display::setSize(int size) {
 
 
 void Display::print() {
+	/*
+		int size;
+	string type;
+	string resolution;
+	string brand;*/
 
+	cout << "Size(inches): " << this->size << endl;
+	cout << "Resolution: " << this->resolution << endl;
+	cout << "Brand: " << this->brand << endl;
 }
  

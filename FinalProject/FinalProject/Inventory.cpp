@@ -6,11 +6,12 @@ Inventory::Inventory()
 {
 	iType = "Inventory";
 }
-Inventory::Inventory(string name, double price, string location, int yearPurchased) {
+Inventory::Inventory(string name, double price, int yearPurchased) {
 	this->name = name;
 	this->purchasePrice = price;
-	this->location = location;
+	
 	this->yearPurchased = yearPurchased;
+	calculateDepreciation();
 	iType = "Inventory";
 
 	
@@ -27,12 +28,7 @@ string Inventory::getName() {
 double Inventory::getPurchasePrice(){
 	return this->purchasePrice;
 }
-string Inventory::getLocation(){
-	return this->location;
-}
-double Inventory::getDepreciatedPrice(){
-	return this->depreciatedPrice;
-}
+
 
 int Inventory::getYearPurchased(){
 	return this->yearPurchased;
@@ -49,12 +45,8 @@ void Inventory::setName(string name){
 void Inventory::setPurchasePrice(double price){
 	this->purchasePrice = price;
 }
-void Inventory::setLocation(string location){
-	this->location = location;
-}
-void Inventory::setDepreciatedPrice(double price){
-	this->depreciatedPrice = price;
-}
+
+
 
 void Inventory::setYearPurchased(int year){
 	this->yearPurchased = year;
@@ -65,25 +57,36 @@ void Inventory::setDepreciationYears(int years){
 
 
 
-double Inventory::calculateDepreciation() {
+void Inventory::calculateDepreciation() {
 	double salvagePrice = this->purchasePrice * this->depreciationRate;
 	double dAmount = (this->purchasePrice - salvagePrice) / this->depreciationYears;
-	double dValue = (this->purchasePrice - (dAmount * (getCurrentYear() - this->yearPurchased)));
+	int yearsOwned = getCurrentYear() - this->yearPurchased;
+	double dValue = (this->purchasePrice - (dAmount * yearsOwned));
 	if (dValue < 0)
-		return 0;
+		this->depreciatedPrice = dAmount;
 	else
-		return dValue;
+		this->depreciatedPrice= dValue;
 	
 
 }
 
 int Inventory::getCurrentYear() {
-	time_t now = time(0);
-	tm *ltm = localtime(&now);
-	return 1970 + ltm->tm_year;
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+
+	
+	return timePtr->tm_year + 1900;
 
 }
 
 //output
 void Inventory::print(){
+	cout << endl;
+	cout << "Type: " << this->iType << endl;
+	cout << "Name: " << this->name << endl;
+	cout << "Year Purchased: " << this->yearPurchased << endl;
+	cout << "Purchase Price: $" << fixed <<  setprecision(2) << this->purchasePrice << endl;
+	cout << "Current Value: $" << fixed << setprecision(2)  << this->depreciatedPrice << endl;
+	
+	
 }
