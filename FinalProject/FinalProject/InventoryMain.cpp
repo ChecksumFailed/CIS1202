@@ -16,7 +16,15 @@
 
 using namespace std;
 
+/*
+reading/writing to binary file.
+create read/write methods in each class.
+https://stackoverflow.com/questions/37038909/c-read-write-class-from-to-binary-file
+read itype, then create appropriate object and call read
 
+write:  just call the write function of the object. Which will call any parent functions needed.
+
+*/
 
 void displayMainMenu(); //Main Menu of program
 template <class T> T getInput(); //gets and validates input
@@ -165,23 +173,25 @@ void loadDB(vector<Inventory *> &inv,string fileName) {
 
 void saveInv(vector<Inventory *> &inv, string fileName) {
 	fstream file;
-	string tmpRead;
+	
 	file.open(fileName, ios::binary | ios::out | ios::trunc);
 	//If file does not exist, add trunc flag to set file to zero
 	if (!file.is_open()) {
 		file.close();
 		return;
 	}
-	file.seekg(0, ios::beg); //seek to beginning of file
+	
 
-	while (!file.eof()) {
-
-		file.read(reinterpret_cast<char *>(&tmpRead), sizeof(tmpRead));
+	for (int i = 0;i < inv.size(); i++) {
+		Inventory a;
+		
+		file.write(reinterpret_cast<char *>(&a.iType), sizeof(a.iType));
+		file.write(reinterpret_cast<char *>(&a.), sizeof(a.iType));
 
 
 		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);
 	}
-
+	file.close();
 
 }
 

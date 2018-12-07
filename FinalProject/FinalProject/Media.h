@@ -29,6 +29,10 @@ public:
 	void setMediaType(string mediaType);
 
 	virtual void print();
+
+	//Binary file functions
+	virtual void write(fstream &f);
+	virtual void read(fstream &f);
 };
 
 #endif // !MEDIA_H

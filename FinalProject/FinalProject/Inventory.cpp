@@ -90,3 +90,12 @@ void Inventory::print(){
 	
 	
 }
+
+
+//Binary file functions
+void Inventory::write(fstream &f) { 
+}
+
+void Inventory::read(fstream &f) {
+
+}

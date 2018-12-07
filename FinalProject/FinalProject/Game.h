@@ -16,6 +16,10 @@ public:
 	string getPlatform();
 	void setPlatform(string);
 	virtual void print();
+
+	//Binary file functions
+	virtual void write(fstream &f);
+	virtual void read(fstream &f);
 };
 #endif // !GAME_H
 
@@ -34,4 +38,15 @@ string Game::getPlatform() { return this->platform; }
 void Game::setPlatform(string platform) {this->platform = platform; }
 void Game::print() {
 	cout << "Platform: " << this->platform << endl;
+}
+
+
+//Binary file functions
+void Game::write(fstream &f) {
+	Media::write(f);
+}
+
+void Game::read(fstream &f) {
+	Media::write(f);
+
 }

@@ -13,6 +13,11 @@ public:
 	virtual void print();
 	string getArtist();
 	void setArtist(string);
+
+	//Binary file functions
+	virtual void write(fstream &f);
+	virtual void read(fstream &f);
+
 };
 
 #endif //MUSIC_H
@@ -34,4 +39,14 @@ void Music::setArtist(string artist) { this->artist = artist; }
 void Music::print() {
 	Media::print();
 	cout << "Artist: " << this->artist << endl;
+}
+
+//Binary file functions
+void Music::write(fstream &f) {
+	Media::write(f);
+}
+
+void Music::read(fstream &f) {
+	Media::read(f);
+
 }

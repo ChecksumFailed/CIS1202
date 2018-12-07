@@ -11,6 +11,10 @@ public:
 	Movie();
 	~Movie();
 	virtual void print();
+
+	//Binary file functions
+	virtual void write(fstream &f);
+	virtual void read(fstream &f);
 };
 
 #endif
@@ -27,4 +31,14 @@ Movie::~Movie()
 
 void Movie::print() {
 	cout << "Runtime(Minutes): " << endl;
+}
+
+//Binary file functions
+void Movie::write(fstream &f) {
+	Media::write(f);
+}
+
+void Movie::read(fstream &f) {
+	Media::read(f);
+
 }

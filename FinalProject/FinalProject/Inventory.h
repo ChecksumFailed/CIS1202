@@ -14,6 +14,7 @@ class Inventory
 {
 
 private: 
+	
 	std::string name; //name or descriptor of item
 	double purchasePrice; //purchase price of item
 	
@@ -47,6 +48,10 @@ public:
 	void calculateDepreciation();
 	int getCurrentYear();
 	virtual void print();
+
+	//Binary file functions
+	virtual void write(fstream &f);
+	virtual void read(fstream &f);
 
 
 

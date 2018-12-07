@@ -28,5 +28,9 @@ public:
 
 
 	virtual void print();
+
+	//Binary file functions
+	virtual void write(fstream &f);
+	virtual void read(fstream &f);
 };
 #endif // !DISPLAY_H

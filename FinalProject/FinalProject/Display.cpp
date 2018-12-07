@@ -63,4 +63,13 @@ void Display::print() {
 	cout << "Resolution: " << this->resolution << endl;
 	cout << "Brand: " << this->brand << endl;
 }
- 
+
+//Serialize/Deserialize
+void Display::write(fstream &f) {
+	Inventory::write(f);
+}
+
+void Display::read(fstream &f) {
+	Inventory::read(f);
+
+}

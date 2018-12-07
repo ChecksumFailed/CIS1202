@@ -40,3 +40,14 @@ void Media::print() {
 	
 
 }
+
+
+//Serialize/Deserialize
+void Media::write(fstream &f) {
+	Inventory::write(f);
+}	
+
+void Media::read(fstream &f) {
+	Inventory::read(f);
+
+}
