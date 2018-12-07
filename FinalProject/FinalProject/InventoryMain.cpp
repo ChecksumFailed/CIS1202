@@ -3,6 +3,7 @@
 #include <string>
 #include <cmath>
 #include <vector>
+#include <fstream>
 //Custom Class for inventory program
 #include "Inventory.h"
 
@@ -139,3 +140,48 @@ void addItem(vector<Inventory *> &inv) {
 		<< "Choose and item: ";
 	int choice = getInput(1, 6);
 }
+
+void loadDB(vector<Inventory *> &inv,string fileName) {
+	fstream file;
+	string tmpRead;
+	file.open(fileName, ios::binary | ios::in | ios::out);
+	//If file does not exist, add trunc flag to set file to zero
+	if (!file.is_open()) {
+		file.close();
+		return;
+	}
+	file.seekg(0, ios::beg); //seek to beginning of file
+
+	while (!file.eof()) {
+
+		file.read(reinterpret_cast<char *>(&tmpRead), sizeof(tmpRead));
+		
+		
+		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);
+	}
+
+
+}
+
+void saveInv(vector<Inventory *> &inv, string fileName) {
+	fstream file;
+	string tmpRead;
+	file.open(fileName, ios::binary | ios::out | ios::trunc);
+	//If file does not exist, add trunc flag to set file to zero
+	if (!file.is_open()) {
+		file.close();
+		return;
+	}
+	file.seekg(0, ios::beg); //seek to beginning of file
+
+	while (!file.eof()) {
+
+		file.read(reinterpret_cast<char *>(&tmpRead), sizeof(tmpRead));
+
+
+		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);
+	}
+
+
+}
+
