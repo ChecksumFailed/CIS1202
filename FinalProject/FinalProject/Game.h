@@ -44,9 +44,14 @@ void Game::print() {
 //Binary file functions
 void Game::write(ostream &f) {
 	Media::write(f);
+	//f.write(reinterpret_cast<char *>(&platform), sizeof(platform));
+	writeString(f, platform);
 }
 
 void Game::read(istream &f) {
 	Media::read(f);
+	//f.read(reinterpret_cast<char *>(&platform), sizeof(platform));
+	platform = readString(f);
+
 
 }

@@ -67,9 +67,19 @@ void Display::print() {
 //Serialize/Deserialize
 void Display::write(ostream &f) {
 	Inventory::write(f);
+	f.write(reinterpret_cast<char *>(&size), sizeof(size));
+//	f.write(reinterpret_cast<char *>(&resolution), sizeof(resolution));
+	writeString(f, resolution);
+	//f.write(reinterpret_cast<char *>(&brand), sizeof(brand));
+	writeString(f, brand);
 }
 
 void Display::read(istream &f) {
 	Inventory::read(f);
+	f.read(reinterpret_cast<char *>(&size), sizeof(size));
+	//f.read(reinterpret_cast<char *>(&resolution), sizeof(resolution));
+	//f.read(reinterpret_cast<char *>(&brand), sizeof(brand));
+	resolution = readString(f);
+	brand = readString(f);
 
 }

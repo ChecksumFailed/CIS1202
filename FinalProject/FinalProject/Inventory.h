@@ -6,6 +6,7 @@
 #include <iostream>
 #include <iomanip>
 #include <ctime>
+#include <vector>
 
 using namespace std;
 
@@ -23,7 +24,7 @@ private:
 	//Assum 20% rate and 5 years of value. Calculates straight line depreciation for simplicity
 	int depreciationYears = 5; //number of years in life of item.
 	double depreciationRate = 0.2;
-	double depreciationValue;
+	
 	
 
 public:
@@ -50,8 +51,10 @@ public:
 	virtual void print();
 
 	////Seriallize/Deserialize
-	virtual void write(ostream &f);
-	virtual void read(istream &f);
+	virtual void write(ostream &);
+	virtual void read(istream &);
+	static string readString(istream &);
+	void writeString(ostream &, string &);
 
 
 

@@ -29,8 +29,11 @@ write:  just call the write function of the object. Which will call any parent f
 void displayMainMenu(); //Main Menu of program
 template <class T> T getInput(); //gets and validates input
 template <class T> T getInput(T,T);//gets and validates input,checks against range
-void addItem(vector<Inventory *> &inv);
-void test(vector<Inventory *> &inv);
+void addItem(vector<Inventory *> &);
+void test(vector<Inventory *> &);
+void loadDB(vector<Inventory *> &, string);
+void saveInv(vector<Inventory *> &, string);
+void printInv(const vector<Inventory *> &);
 
 
 int main() {
@@ -45,25 +48,32 @@ int main() {
 
 	
 	test(inventoryDB);
+	printInv(inventoryDB);
 
-
+ 	saveInv(inventoryDB, "test.dat");
+	loadDB(inventoryDB, "test.dat");
+	printInv(inventoryDB);
 	cout << "Press any key to exit";
 	getchar();
+
 	return EXIT_SUCCESS;
 }
 
 void test(vector<Inventory *> &inv) {
 	Inventory *i = new Inventory;
-	i->setName("a");
+	i->setName("abcd efg");
 	i->setPurchasePrice(9.99);
 	i->setYearPurchased(1999);
+	
 	i->calculateDepreciation();
+	//i->print();
 	inv.push_back(i);
 	i = new Inventory;
-	i->setName("b");
+	i->setName("gfe dcba");
 	i->setPurchasePrice(19.99);
 	i->setYearPurchased(1988);
 	i->calculateDepreciation();
+	//i->print();
 	inv.push_back(i);
 }
 
@@ -101,7 +111,7 @@ T getInput() {
 		if (cin.fail()) {
 			cout << "\nYou have entered invalid input.  Try Again\n";
 			cin.clear();
-			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 		else
 			isValid = true;
@@ -130,7 +140,7 @@ T getInput(T low, T high) {
 		if (cin.fail() || tmpHolder < low || tmpHolder > high) {
 			cout << "\nYou have entered invalid input.  Try Again:";
 			cin.clear();
-			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 		}
 		else
@@ -167,9 +177,11 @@ void loadDB(vector<Inventory *> &inv,string fileName) {
 	}
 	file.seekg(0, ios::beg); //seek to beginning of file
 	int counter = inv.size();
-	while (!file.eof()) {
-
-		file.read(reinterpret_cast<char *>(&tmpRead), sizeof(tmpRead));
+	
+	tmpRead = Inventory::readString(file);
+	while (!file.eof() && file.good()) {
+		
+		
 		if (tmpRead == "Inventory")
 			inv.push_back(new Inventory);
 		else if (tmpRead == "Media")
@@ -183,15 +195,21 @@ void loadDB(vector<Inventory *> &inv,string fileName) {
 		else if (tmpRead == "Game")
 			inv.push_back(new Game);
 		
+		
 		inv[counter]->read(file);
 		counter++;
+		tmpRead = "";
+		tmpRead = Inventory::readString(file);
 		
+	
 		
 		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);
 	}
 
 
 }
+
+
 
 void saveInv(vector<Inventory *> &inv, string fileName) {
 	fstream file;
@@ -204,19 +222,18 @@ void saveInv(vector<Inventory *> &inv, string fileName) {
 	}
 	
 	for (Inventory *a : inv) {
-		
+		a->write(file);
 	}
-
-	for (int i = 0;i < inv.size(); i++) {
-		
-		
-		file.write(reinterpret_cast<char *>(&a.iType), sizeof(a.iType));
+			
 	
 
-
-		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);
-	}
 	file.close();
 
 }
 
+void printInv(const vector<Inventory *> &inv) {
+
+	for (Inventory *a : inv) {
+		a->print();
+	}
+}

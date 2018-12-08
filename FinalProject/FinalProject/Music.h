@@ -44,9 +44,11 @@ void Music::print() {
 //Binary file functions
 void Music::write(ostream &f) {
 	Media::write(f);
+	writeString(f, artist);
 }
 
 void Music::read(istream &f) {
 	Media::read(f);
+	artist = readString(f);
 
 }

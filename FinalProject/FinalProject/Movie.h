@@ -36,9 +36,11 @@ void Movie::print() {
 //Binary file functions
 void Movie::write(ostream &f) {
 	Media::write(f);
+	f.write(reinterpret_cast<char *>(&runtime), sizeof(runtime));
 }
 
 void Movie::read(istream &f) {
 	Media::read(f);
+	f.read(reinterpret_cast<char *>(&runtime), sizeof(runtime));
 
 }

@@ -94,18 +94,50 @@ void Inventory::print(){
 
 //Seriallize/Deserialize
 void Inventory::write(ostream &f) { 
-	f.write(reinterpret_cast<char *>(&iType), sizeof(iType));
-	f.write(reinterpret_cast<char *>(&name), sizeof(name));
-	f.write(reinterpret_cast<char *>(&purchasePrice), sizeof(&purchasePrice));
+	cout << purchasePrice << endl;
+
+	
+
+	//f.write(reinterpret_cast<char *>(&iType), sizeof(iType));
+	writeString(f, iType);
+	writeString(f, name);
+	f.write(reinterpret_cast<char *>(&yearPurchased), sizeof(&yearPurchased));
+	f.write(reinterpret_cast<char *>(&depreciationRate), sizeof(&depreciationRate));
+	f.write(reinterpret_cast<char *>(&depreciationYears), sizeof(&depreciationYears));
+	f.write(reinterpret_cast<char *>(&purchasePrice), sizeof(double));
+	f.write(reinterpret_cast<char *>(&depreciatedPrice), sizeof(double));
+
+	
 }
 
 void Inventory::read(istream &f) {
 	
-	f.read(reinterpret_cast<char *>(&name), sizeof(name));
+	name = readString(f);
+	
 	f.read(reinterpret_cast<char *>(&yearPurchased), sizeof(&yearPurchased));
-	f.read(reinterpret_cast<char *>(&purchasePrice), sizeof(&purchasePrice));
-	calculateDepreciation();
-	
-	
+	f.read(reinterpret_cast<char *>(&depreciationRate), sizeof(&depreciationRate));
+	f.read(reinterpret_cast<char *>(&depreciationYears), sizeof(&depreciationYears));
+	f.read(reinterpret_cast<char *>(&purchasePrice), sizeof(double));
+	f.read(reinterpret_cast<char *>(&depreciatedPrice), sizeof(double));
 
+}
+
+string Inventory::readString(istream &f) {
+	size_t stringSize;
+	f.read(reinterpret_cast<char *>(&stringSize), sizeof(size_t));
+	if (f.eof() || !f.good())
+		return "";
+	vector<char> temp(stringSize);
+	f.read(reinterpret_cast<char *>(&temp[0]), stringSize * sizeof(char));
+	string tempString(temp.begin(), temp.end());
+	return tempString;
+
+}
+
+
+
+void Inventory::writeString(ostream &f, string &s) {
+	size_t stringSize = s.size();
+	f.write(reinterpret_cast<char *>(&stringSize), sizeof(size_t));
+	f.write(s.c_str(), stringSize * sizeof(char));
 }
