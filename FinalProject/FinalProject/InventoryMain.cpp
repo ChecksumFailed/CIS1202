@@ -48,11 +48,13 @@ int main() {
 
 	
 	test(inventoryDB);
+	//printInv(inventoryDB);
+
+ 	
+	//loadDB(inventoryDB, "test.dat");
 	printInv(inventoryDB);
 
- 	saveInv(inventoryDB, "test.dat");
-	loadDB(inventoryDB, "test.dat");
-	printInv(inventoryDB);
+	saveInv(inventoryDB, "test.dat");
 	cout << "Press any key to exit";
 	getchar();
 
@@ -61,20 +63,37 @@ int main() {
 
 void test(vector<Inventory *> &inv) {
 	Inventory *i = new Inventory;
-	i->setName("abcd efg");
+	i->setName("Gold Ring");
 	i->setPurchasePrice(9.99);
 	i->setYearPurchased(1999);
 	
 	i->calculateDepreciation();
 	//i->print();
 	inv.push_back(i);
-	i = new Inventory;
-	i->setName("gfe dcba");
-	i->setPurchasePrice(19.99);
-	i->setYearPurchased(1988);
-	i->calculateDepreciation();
+
+	Movie *m = new Movie;
+	m->setName("Horror Movie");
+	m->setPurchasePrice(5.99);
+	m->setYearPurchased(2010);
+	m->calculateDepreciation();
+	m->setGenre("Horror");
+	m->setMediaType("Digital");
+	m->setYear(2009);
+	m->setRating(3.3);
 	//i->print();
-	inv.push_back(i);
+	inv.push_back(m);
+
+	Display *d = new Display;
+	d->setName("My TV");
+	d->setPurchasePrice(1999.99);
+	d->setYearPurchased(2018);
+	d->calculateDepreciation();
+	d->setBrand("Samsung");
+	d->setResolution("4k");
+	d->setSize(75);
+	
+	//i->print();
+	inv.push_back(d);
 }
 
 void displayMainMenu() {

@@ -82,11 +82,11 @@ int Inventory::getCurrentYear() {
 //output
 void Inventory::print(){
 	cout << endl;
-	cout << "Type: " << this->iType << endl;
-	cout << "Name: " << this->name << endl;
-	cout << "Year Purchased: " << this->yearPurchased << endl;
-	cout << "Purchase Price: $" << fixed <<  setprecision(2) << this->purchasePrice << endl;
-	cout << "Current Value: $" << fixed << setprecision(2)  << this->depreciatedPrice << endl;
+	cout << setw(20) << left << "Type " << ": " << this->iType << endl;
+	cout << setw(20) << left << "Name " << ": " << this->name << endl;
+	cout << setw(20) << left << "Year Purchased " << ": " << this->yearPurchased << endl;
+	cout << setw(20) << left << "Purchase Price" << ": $" << fixed <<  setprecision(2) << this->purchasePrice << endl;
+	cout << setw(20) << left << "Current Value" << ": $" << fixed << setprecision(2)  << this->depreciatedPrice << endl;
 	
 	
 }
@@ -94,7 +94,7 @@ void Inventory::print(){
 
 //Seriallize/Deserialize
 void Inventory::write(ostream &f) { 
-	cout << purchasePrice << endl;
+	//cout << purchasePrice << endl;
 
 	
 

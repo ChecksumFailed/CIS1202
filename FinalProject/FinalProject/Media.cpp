@@ -34,9 +34,9 @@ void Media::setMediaType(string mediaType) { this->mediaType = mediaType; }
 
 void Media::print() {
 	Inventory::print();
-	cout << "Genre: " << this->genre << endl;
-	cout << "Rating: " << fixed << setprecision(1) << this->rating << endl;
-	cout << "Release Year: " << this->year << endl;
+	cout << setw(20) << left << "Genre " << ": " << this->genre << endl;
+	cout << setw(20) << left << "Rating " << ": " << fixed << setprecision(1) << this->rating << endl;
+	cout << setw(20) << left << "Release Year " << ": " << this->year << endl;
 	
 
 }

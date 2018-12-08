@@ -38,7 +38,7 @@ void Music::setArtist(string artist) { this->artist = artist; }
 
 void Music::print() {
 	Media::print();
-	cout << "Artist: " << this->artist << endl;
+	cout << setw(20) << left << "Artist " << ": " << this->artist << endl;
 }
 
 //Binary file functions

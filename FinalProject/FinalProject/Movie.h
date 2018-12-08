@@ -30,7 +30,8 @@ Movie::~Movie()
 }
 
 void Movie::print() {
-	cout << "Runtime(Minutes): " << endl;
+	Media::print();
+	cout << setw(20) << left << "Runtime(Minutes) " << ": " << endl;
 }
 
 //Binary file functions

@@ -58,10 +58,10 @@ void Display::print() {
 	string type;
 	string resolution;
 	string brand;*/
-
-	cout << "Size(inches): " << this->size << endl;
-	cout << "Resolution: " << this->resolution << endl;
-	cout << "Brand: " << this->brand << endl;
+	Inventory::print();
+	cout << setw(20) << left << "Size(inches) " << ": " << this->size << endl;
+	cout << setw(20) << left << "Resolution " << ": " << this->resolution << endl;
+	cout << setw(20) << left << "Brand " << ": " << this->brand << endl;
 }
 
 //Serialize/Deserialize
