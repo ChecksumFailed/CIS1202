@@ -49,9 +49,9 @@ public:
 	int getCurrentYear();
 	virtual void print();
 
-	//Binary file functions
-	virtual void write(fstream &f);
-	virtual void read(fstream &f);
+	////Seriallize/Deserialize
+	virtual void write(ostream &f);
+	virtual void read(istream &f);
 
 
 

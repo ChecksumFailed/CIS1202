@@ -92,10 +92,20 @@ void Inventory::print(){
 }
 
 
-//Binary file functions
-void Inventory::write(fstream &f) { 
+//Seriallize/Deserialize
+void Inventory::write(ostream &f) { 
+	f.write(reinterpret_cast<char *>(&iType), sizeof(iType));
+	f.write(reinterpret_cast<char *>(&name), sizeof(name));
+	f.write(reinterpret_cast<char *>(&purchasePrice), sizeof(&purchasePrice));
 }
 
-void Inventory::read(fstream &f) {
+void Inventory::read(istream &f) {
+	
+	f.read(reinterpret_cast<char *>(&name), sizeof(name));
+	f.read(reinterpret_cast<char *>(&yearPurchased), sizeof(&yearPurchased));
+	f.read(reinterpret_cast<char *>(&purchasePrice), sizeof(&purchasePrice));
+	calculateDepreciation();
+	
+	
 
 }

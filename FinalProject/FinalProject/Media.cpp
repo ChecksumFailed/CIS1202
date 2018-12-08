@@ -43,11 +43,19 @@ void Media::print() {
 
 
 //Serialize/Deserialize
-void Media::write(fstream &f) {
+void Media::write(ostream &f) {
 	Inventory::write(f);
+	string genre;
+	float rating;
+	int year;
+	string mediaType;
+	f.write(reinterpret_cast<char *>(&genre), sizeof(genre));
+	f.write(reinterpret_cast<char *>(&rating), sizeof(rating));
+	f.write(reinterpret_cast<char *>(&genre), sizeof(genre));
+	f.write(reinterpret_cast<char *>(&genre), sizeof(genre));
 }	
 
-void Media::read(fstream &f) {
+void Media::read(istream &f) {
 	Inventory::read(f);
 
 }

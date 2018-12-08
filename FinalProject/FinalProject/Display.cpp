@@ -65,11 +65,11 @@ void Display::print() {
 }
 
 //Serialize/Deserialize
-void Display::write(fstream &f) {
+void Display::write(ostream &f) {
 	Inventory::write(f);
 }
 
-void Display::read(fstream &f) {
+void Display::read(istream &f) {
 	Inventory::read(f);
 
 }

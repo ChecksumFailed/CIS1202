@@ -17,9 +17,9 @@ public:
 	void setPlatform(string);
 	virtual void print();
 
-	//Binary file functions
-	virtual void write(fstream &f);
-	virtual void read(fstream &f);
+	////Seriallize/Deserialize
+	virtual void write(ostream &f);
+	virtual void read(istream &f);
 };
 #endif // !GAME_H
 
@@ -42,11 +42,11 @@ void Game::print() {
 
 
 //Binary file functions
-void Game::write(fstream &f) {
+void Game::write(ostream &f) {
 	Media::write(f);
 }
 
-void Game::read(fstream &f) {
-	Media::write(f);
+void Game::read(istream &f) {
+	Media::read(f);
 
 }

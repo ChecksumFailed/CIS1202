@@ -6,7 +6,7 @@
 #include <fstream>
 //Custom Class for inventory program
 #include "Inventory.h"
-
+#include "Media.h"
 #include "Display.h"
 #include "Game.h"
 #include "Movie.h"
@@ -30,6 +30,8 @@ void displayMainMenu(); //Main Menu of program
 template <class T> T getInput(); //gets and validates input
 template <class T> T getInput(T,T);//gets and validates input,checks against range
 void addItem(vector<Inventory *> &inv);
+void test(vector<Inventory *> &inv);
+
 
 int main() {
 	vector<Inventory *> inventoryDB; //Inventory Vector to hold pointers to derived classes.
@@ -40,17 +42,9 @@ int main() {
 
 	*/
 
-	Music poo;
-	poo.setArtist("Bono");
-	poo.setGenre("Country");
-	poo.setMediaType("Digital");
-	poo.setName("Best of U2");
-	poo.setPurchasePrice(9.99);
-	poo.setRating(8.5);
-	poo.setYearPurchased(1999);
-	poo.setYear(1997);
-	poo.calculateDepreciation();
-	poo.print();
+
+	
+	test(inventoryDB);
 
 
 	cout << "Press any key to exit";
@@ -58,7 +52,20 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
-
+void test(vector<Inventory *> &inv) {
+	Inventory *i = new Inventory;
+	i->setName("a");
+	i->setPurchasePrice(9.99);
+	i->setYearPurchased(1999);
+	i->calculateDepreciation();
+	inv.push_back(i);
+	i = new Inventory;
+	i->setName("b");
+	i->setPurchasePrice(19.99);
+	i->setYearPurchased(1988);
+	i->calculateDepreciation();
+	inv.push_back(i);
+}
 
 void displayMainMenu() {
 	cout << "CIS 1202 Home Inventory Database\n\n";
@@ -152,17 +159,32 @@ void addItem(vector<Inventory *> &inv) {
 void loadDB(vector<Inventory *> &inv,string fileName) {
 	fstream file;
 	string tmpRead;
-	file.open(fileName, ios::binary | ios::in | ios::out);
+	file.open(fileName, ios::binary | ios::in );
 	//If file does not exist, add trunc flag to set file to zero
 	if (!file.is_open()) {
 		file.close();
 		return;
 	}
 	file.seekg(0, ios::beg); //seek to beginning of file
-
+	int counter = inv.size();
 	while (!file.eof()) {
 
 		file.read(reinterpret_cast<char *>(&tmpRead), sizeof(tmpRead));
+		if (tmpRead == "Inventory")
+			inv.push_back(new Inventory);
+		else if (tmpRead == "Media")
+			inv.push_back(new Media);
+		else if (tmpRead == "Display")
+			inv.push_back(new Display);
+		else if (tmpRead == "Music")
+			inv.push_back(new Music);
+		else if (tmpRead == "Movie")
+			inv.push_back(new Movie);
+		else if (tmpRead == "Game")
+			inv.push_back(new Game);
+		
+		inv[counter]->read(file);
+		counter++;
 		
 		
 		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);
@@ -181,12 +203,15 @@ void saveInv(vector<Inventory *> &inv, string fileName) {
 		return;
 	}
 	
+	for (Inventory *a : inv) {
+		
+	}
 
 	for (int i = 0;i < inv.size(); i++) {
-		Inventory a;
+		
 		
 		file.write(reinterpret_cast<char *>(&a.iType), sizeof(a.iType));
-		file.write(reinterpret_cast<char *>(&a.), sizeof(a.iType));
+	
 
 
 		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);

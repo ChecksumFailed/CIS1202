@@ -12,9 +12,9 @@ public:
 	~Movie();
 	virtual void print();
 
-	//Binary file functions
-	virtual void write(fstream &f);
-	virtual void read(fstream &f);
+	////Seriallize/Deserialize
+	virtual void write(ostream &f);
+	virtual void read(istream &f);
 };
 
 #endif
@@ -34,11 +34,11 @@ void Movie::print() {
 }
 
 //Binary file functions
-void Movie::write(fstream &f) {
+void Movie::write(ostream &f) {
 	Media::write(f);
 }
 
-void Movie::read(fstream &f) {
+void Movie::read(istream &f) {
 	Media::read(f);
 
 }

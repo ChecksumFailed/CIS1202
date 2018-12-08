@@ -14,9 +14,9 @@ public:
 	string getArtist();
 	void setArtist(string);
 
-	//Binary file functions
-	virtual void write(fstream &f);
-	virtual void read(fstream &f);
+	////Seriallize/Deserialize
+	virtual void write(ostream &f);
+	virtual void read(istream &f);
 
 };
 
@@ -42,11 +42,11 @@ void Music::print() {
 }
 
 //Binary file functions
-void Music::write(fstream &f) {
+void Music::write(ostream &f) {
 	Media::write(f);
 }
 
-void Music::read(fstream &f) {
+void Music::read(istream &f) {
 	Media::read(f);
 
 }
