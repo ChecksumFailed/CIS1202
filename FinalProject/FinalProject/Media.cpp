@@ -20,29 +20,111 @@ Media::~Media()
 	iType = "Media";
 }
 
-
+/*
+Purpose : gets value of the property - genre
+	Input Parameters :
+I / O Parameters :
+Output Parameters :
+Function Return Value :
+string - genre
+*/
 string Media::getGenre() { return this->genre; }
+/*
+Purpose : gets value of the property - rating
+	Input Parameters :
+I / O Parameters :
+Output Parameters :
+Function Return Value :
+float - rating
+*/
 float Media::getRating() { return this->rating; }
+/*
+Purpose : gets value of the property - year
+	Input Parameters :
+I / O Parameters :
+Output Parameters :
+Function Return Value :
+	int - year
+*/
 int Media::getYear() { return this->year; }
+/*
+Purpose : gets value of the property - mediaType
+	Input Parameters :
+I / O Parameters :
+Output Parameters :
+Function Return Value :
+	string - mediaType
+*/
 string Media::getMediaType() { return this->mediaType; }
 
+/*
+Purpose : sets value of the property - genre
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+string - genre
+Function Return Value:
 
+*/
 void Media::setGenre(string genre) { this->genre = genre; }
-void Media::setRating(float rating) { this->rating = rating; }
-void Media::setYear(int year) { this->year = year; }
-void Media::setMediaType(string mediaType) { this->mediaType = mediaType; }
+/*
+Purpose : sets value of the property - rating
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+	int -rating
+Function Return Value:
 
+*/
+void Media::setRating(float rating) { this->rating = rating; }
+/*
+Purpose : sets value of the property - year
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+	int -year
+Function Return Value:
+
+*/
+void Media::setYear(int year) { this->year = year; }
+/*
+Purpose : sets value of the property - mediaType
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+	string - mediaType
+Function Return Value:
+
+*/
+void Media::setMediaType(string mediaType) { this->mediaType = mediaType; }
+/*
+Purpose : Prints the contents of object
+Input Parameters :
+I/O Parameters : D
+Output Parameters :
+Function Return Value:
+*/
 void Media::print() {
 	Inventory::print();
 	cout << setw(20) << left << "Genre " << ": " << this->genre << endl;
 	cout << setw(20) << left << "Rating " << ": " << fixed << setprecision(1) << this->rating << endl;
 	cout << setw(20) << left << "Release Year " << ": " << this->year << endl;
+	cout << setw(20) << left << "Media Type " << ": " << this->mediaType << endl;
 	
 
 }
 
 
 //Serialize/Deserialize
+/*
+Purpose : Serializes object properties and writes to binary file
+Input Parameters :
+	ostream f- filestream object
+I/O Parameters :
+Output Parameters :
+
+Function Return Value:
+*/
 void Media::write(ostream &f) {
 	Inventory::write(f);
 
@@ -53,7 +135,15 @@ void Media::write(ostream &f) {
 	//f.write(reinterpret_cast<char *>(&mediaType), sizeof(mediaType));
 	writeString(f, mediaType);
 }	
+/*
+Purpose : Deserialized data from binary file and populates object values
+Input Parameters :
+	istream f- filestream object
+I/O Parameters :
+Output Parameters :
 
+Function Return Value:
+*/
 void Media::read(istream &f) {
 	Inventory::read(f);
 	//f.read(reinterpret_cast<char *>(&genre), sizeof(genre));
@@ -64,7 +154,13 @@ void Media::read(istream &f) {
 	mediaType = readString(f);
 
 }
-
+/*
+Purpose : Prompts user to for values needed to populate new object
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+Function Return Value:
+*/
 void Media::populateProperties() {
 	Inventory::populateProperties();
 	cout << "Enter genre: ";
@@ -77,7 +173,14 @@ void Media::populateProperties() {
 	this->mediaType = getString();
 
 }
-
+/*
+Purpose : Allows users to update any propety in class
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+	int choice - placeholer for user choice
+Function Return Value:
+*/
 void Media::updateItem() {
 	int choice;
 	int maxChoice = 6;
@@ -101,7 +204,7 @@ void Media::updateItem() {
 			break;
 		case 3:
 			cout << "Enter new purchase price: ";
-			this->setYearPurchased(getInput<double>());
+			this->setPurchasePrice(getInput<double>());
 			break;
 		case 4:
 			cout << "Enter new genre: ";

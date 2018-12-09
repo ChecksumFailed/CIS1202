@@ -37,21 +37,62 @@ Game::Game()
 Game::~Game()
 {
 }
-
+/*
+Purpose : gets value of the property - platform
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+Function Return Value:
+	string - platform
+*/
 string Game::getPlatform() { return this->platform; }
+/*
+Purpose : sets value of the property - platform
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+string - platform
+Function Return Value:
+	
+*/
 void Game::setPlatform(string platform) {this->platform = platform; }
+
+/*
+Purpose : Prints the contents of object
+Input Parameters :
+I/O Parameters : D
+Output Parameters :
+Function Return Value:
+*/
 void Game::print() {
 	cout << setw(20) << left << "Platform " << ": " << this->platform << endl;
 }
 
 
 //Binary file functions
+/*
+Purpose : Serializes object properties and writes to binary file
+Input Parameters :
+	ostream f- filestream object
+I/O Parameters :
+Output Parameters :
+
+Function Return Value:
+*/
 void Game::write(ostream &f) {
 	Media::write(f);
 	//f.write(reinterpret_cast<char *>(&platform), sizeof(platform));
 	writeString(f, platform);
 }
+/*
+Purpose : Deserialized data from binary file and populates object values
+Input Parameters :
+	istream f- filestream object
+I/O Parameters :
+Output Parameters :
 
+Function Return Value:
+*/
 void Game::read(istream &f) {
 	Media::read(f);
 	//f.read(reinterpret_cast<char *>(&platform), sizeof(platform));
@@ -59,14 +100,27 @@ void Game::read(istream &f) {
 
 
 }
-
+/*
+Purpose : Prompts user to for values needed to populate new object
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+Function Return Value:
+*/
 void Game::populateProperties(){
 	Media::populateProperties();
 	cout << "Enter platform(Xbox,pc,etc): ";
 	this->platform = getString();
 }
 
-
+/*
+Purpose : Allows users to update any propety in class
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+	int choice - placeholer for user choice
+Function Return Value:
+*/
 void Game::updateItem() {
 	int choice;
 	int maxChoice = 7;

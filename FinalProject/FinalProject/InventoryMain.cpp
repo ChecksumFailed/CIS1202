@@ -7,7 +7,7 @@
 #include <map>
 #include <regex>
 #include <algorithm>
-//Custom Class for inventory program
+//Custom Classes for inventory program
 #include "Inventory.h"
 #include "Media.h"
 #include "Display.h"
@@ -19,18 +19,8 @@
 
 using namespace std;
 
-/*
-reading/writing to binary file.
-create read/write methods in each class.
-https://stackoverflow.com/questions/37038909/c-read-write-class-from-to-binary-file
-read itype, then create appropriate object and call read
-
-write:  just call the write function of the object. Which will call any parent functions needed.
-
-*/
 
 void displayMainMenu(); //Main Menu of program
-
 void addItem(vector<Inventory *> &);
 void test(vector<Inventory *> &);
 void loadDB(vector<Inventory *> &, string);
@@ -46,12 +36,19 @@ void sortInv(vector<Inventory *> &);
 
 
 
-
+/*
+Programmer Name: Ben Scherer
+Program # : FINAL PROJECT
+Course: CIS 1202 Section 502
+Date : 12/09/2018
+Program Description :Final Project	- Home inventory system.  
+					uses Class inheritance, virtual functions, template functions and custom serialization/deserialztion for persitent data storage
+*/
 int main() {
 	vector<Inventory *> inventoryDB; //Inventory Vector to hold pointers to derived classes.
 	int choice;
 	try {
-		loadDB(inventoryDB, "inventory.dat");
+		loadDB(inventoryDB, "inventory.dat"); //load binary file into vector
 	}
 	catch (exception e) {
 		cout << "ERROR reading data from file.  Please fix error or delete file\n";
@@ -63,20 +60,20 @@ int main() {
 		choice = Inventory::getInput<int>(1, 6);
 		switch (choice)
 		{
-		case 1:
+		case 1: //print vector
 			printInv(inventoryDB);
 			break;
-		case 2:
+		case 2://print summary of items
 			printSummary(inventoryDB);
 			break;
-		case 3:
+		case 3: //search for item
 			cout << "Enter name to search for: ";
 			search(inventoryDB, Inventory::getString());
 			break;
-		case 4:
+		case 4: //add item
 			addItem(inventoryDB);
 			break;
-		case 5:
+		case 5: //sort vector
 			sortInv(inventoryDB);
 			break;
 		
@@ -86,14 +83,24 @@ int main() {
 	} while ( choice != 6);
 
 	
-	saveInv(inventoryDB, "inventory.dat");
+	saveInv(inventoryDB, "inventory.dat"); //save vector to file
 	
+	//Wait for user to exit
 	cout << "Press any key to exit";
 	getchar();
 
 	return EXIT_SUCCESS;
 }
 
+
+
+/*
+Purpose :Displays main menu of program
+Input Parameters :n/a
+I/O Parameters : n/a
+Output Parameters : n/a
+Function Return Value: n/a
+*/
 void displayMainMenu() {
 	cout << "\nCIS 1202 Home Inventory Database\n\n";
 	cout << "1 - Print Inventory\n";
@@ -106,6 +113,15 @@ void displayMainMenu() {
 
 }
 
+/*
+Purpose : Sorts Inventory based on multiple criteria
+Input Parameters :
+	inv - vector of inventory pointers
+I/O Parameters : 
+	inv - vector of inventory pointers
+Output Parameters : 
+Function Return Value: 
+*/
 void sortInv(vector<Inventory *> &inv) {
 	cout << "\nSort Menu\n";
 	cout << "1 - Sort by Name(ASC)\n";
@@ -119,17 +135,17 @@ void sortInv(vector<Inventory *> &inv) {
 	int choice = Inventory::getInput<int>(1, 7);
 
 	switch (choice) {
-	case 1:
+	case 1://use overloaded operator
 		sort(inv.begin(), inv.end(), [](Inventory *a, Inventory *b) {
-			if (a->getName().compare(b->getName()) < 0)
+			if (a < b)
 				return true;
 			else
 				return false;
 		});
 		break;
-	case 2:
+	case 2://use overloaded operator
 		sort(inv.begin(), inv.end(), [](Inventory *a, Inventory *b) {
-			if (a->getName().compare(b->getName()) > 0)
+			if (a > b)
 				return true;
 			else
 				return false;
@@ -158,6 +174,15 @@ void sortInv(vector<Inventory *> &inv) {
 
 }
 
+/*
+Purpose : Adds new item to inventory
+Input Parameters : 
+	inv - vector of Inventory pointers
+I/O Parameters : 
+	inv - vector of inventory pointers
+Output Parameters : 
+Function Return Value: (for non-void functions) Description of any value returned by the function
+*/
 void addItem(vector<Inventory *> &inv) {
 	
 	cout << "1 - Display\n"
@@ -199,7 +224,18 @@ void addItem(vector<Inventory *> &inv) {
 
 }
 
-
+/*
+Purpose : Reads in binary file and deserializes into a vector of pointers
+Input Parameters : 
+	inv - vector of inventory pointers
+	fileName - name of file to open
+I/O Parameters :
+	inv - vector of inventory pointers
+Output Parameters : 
+	fstream file - binary file to read in
+	string tmpRead - placeholder to read in class type
+Function Return Value: 
+*/
 
 void loadDB(vector<Inventory *> &inv,string fileName) {
 	fstream file;
@@ -213,10 +249,10 @@ void loadDB(vector<Inventory *> &inv,string fileName) {
 	file.seekg(0, ios::beg); //seek to beginning of file
 	int counter = inv.size();
 	
-	tmpRead = Inventory::readString(file);
+	tmpRead = Inventory::readString(file); //Make sure file is not empty
 	while (!file.eof() && file.good()) {
 		
-		
+		// add new object to vector, based on type
 		if (tmpRead == "Inventory")
 			inv.push_back(new Inventory);
 		else if (tmpRead == "Media")
@@ -230,28 +266,33 @@ void loadDB(vector<Inventory *> &inv,string fileName) {
 		else if (tmpRead == "Game")
 			inv.push_back(new Game);
 		
-		if (inv[counter]) {
-			inv[counter]->read(file);
+		if (inv[counter]) { //If item was added, populate with data
+			inv[counter]->read(file); //calls class deserialization function
 			counter++;
 		}
-		if (file.eof() || !file.good()) {
+		if (file.eof() || !file.good()) { //if we hit end of file, exit function
 			file.close();
 			return;
 		}
 		tmpRead = "";
 		tmpRead = Inventory::readString(file);
 		
-	
-		
-		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);
 	}
 
-	file.close();
+	file.close(); //close our file
 
 }
 
 
-
+/*
+Purpose : Write vector to binary file
+Input Parameters : 
+	inv - vector of pointers
+	string filename - naem of file to write to
+I/O Parameters : Description of reference parameters that have one value upon entering the routine and different value upon leaving the routine
+Output Parameters : Description of reference parameters that receive their initial value inside the function
+Function Return Value: (for non-void functions) Description of any value returned by the function
+*/
 void saveInv(vector<Inventory *> &inv, string fileName) {
 	fstream file;
 	
@@ -263,22 +304,36 @@ void saveInv(vector<Inventory *> &inv, string fileName) {
 	}
 	
 	for (Inventory *a : inv) {
-		a->write(file);
+		a->write(file); //call class serialization function and write to file
 	}
-			
 	
-
-	file.close();
+	file.close(); //close file
 
 }
 
+/*
+Purpose : Print contents of inventory vector
+Input Parameters :
+		inv - vector of inventory pointers
+I/O Parameters : 
+Output Parameters : 
+Function Return Value: 
+*/
 void printInv(const vector<Inventory *> &inv) {
 
 	for (Inventory *a : inv) {
-		a->print();
+		a->print(); //call class print function
 	}
 }
 
+/*
+Purpose : Prints summary of all items in inventory
+Input Parameters : 
+	inv - vector of Inventory pointers
+I/O Parameters : Description of reference parameters that have one value upon entering the routine and different value upon leaving the routine
+Output Parameters : Description of reference parameters that receive their initial value inside the function
+Function Return Value: (for non-void functions) Description of any value returned by the function
+*/
 void printSummary(const vector<Inventory *> &inv) {
 	int totalItem = 0;
 	map<string, int> countMap;
@@ -307,6 +362,16 @@ void printSummary(const vector<Inventory *> &inv) {
 
 }
 
+/*
+Purpose : Summarizes numeric values of map and returns value
+Input Parameters : 
+	map<string, T> m - map to perform operation on
+I/O Parameters : 
+Output Parameters : 
+	T sumVar = temporary var to increment
+Function Return Value: 
+	T sumVar - summarized value
+*/
 template <class T> T sumMap(map<string, T> m) {
 	T sumVar = 0;
 	typename map<string, T>::iterator it = m.begin();
@@ -319,7 +384,18 @@ template <class T> T sumMap(map<string, T> m) {
 	return sumVar;
 }
 
-
+/*
+Purpose : Searches vector for tiem based on name
+Input Parameters :
+	string searchString - String to search vector for
+I/O Parameters : 
+	vector<Inventory *> &inv -  vector of inventory objects
+Output Parameters :
+	vector<Inventory *> results - Temporary vector to hold search results
+	int choice - holds user input
+	int curSize - current size of search results
+Function Return Value:
+*/
 void search(vector<Inventory *> &inv, string searchString) {
 	vector<Inventory *> results; //temporary vector to hold search results
 	regex strRegEx(".*" + searchString + ".*", regex_constants::icase | regex_constants::ECMAScript); //Regex pattern to validate input
@@ -332,8 +408,10 @@ void search(vector<Inventory *> &inv, string searchString) {
 	do {
 		curSize = results.size();
 		int counter = 0;
+		cout << "Search Results\n";
 		for (Inventory *i : results) {
 			cout << counter << " - " << i->getName() << endl;
+			counter++;
 		}
 		if (results.size() == 0) {
 			cout << "No match found\n";
@@ -367,6 +445,15 @@ void search(vector<Inventory *> &inv, string searchString) {
 
 	
 }
+/*
+Purpose : Displays menu of actions that can be performed on an object
+Input Parameters : 
+	T Item - pointer to individual Inventory class
+I/O Parameters : 	
+Output Parameters : 
+Function Return Value: 
+	returns integer chosen by user
+*/
 template <class T>
 int itemMenu(T &item) {
 	

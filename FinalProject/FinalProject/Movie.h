@@ -37,37 +37,89 @@ Movie::~Movie()
 }
 
 //getter/setters
+/*
+Purpose : gets value of the property - runtime
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+Function Return Value:
+int - runtime
+*/
 int Movie::getRuntime() {
 	return this->runtime;
 }
+/*
+Purpose : sets value of the property - runtime
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+	int - runtime
+Function Return Value:
 
+*/
 void Movie::setRuntime(int runtime) {
 	this->runtime = runtime;
 }
-
+/*
+Purpose : Prints the contents of object
+Input Parameters :
+I/O Parameters : D
+Output Parameters :
+Function Return Value:
+*/
 void Movie::print() {
 	Media::print();
 	cout << setw(20) << left << "Runtime(Minutes) " << ": " << this->runtime << endl;
 }
 
 //Binary file functions
+/*
+Purpose : Serializes object properties and writes to binary file
+Input Parameters :
+	ostream f- filestream object
+I/O Parameters :
+Output Parameters :
+
+Function Return Value:
+*/
 void Movie::write(ostream &f) {
 	Media::write(f);
 	f.write(reinterpret_cast<char *>(&runtime), sizeof(runtime));
 }
+/*
+Purpose : Deserialized data from binary file and populates object values
+Input Parameters :
+	istream f- filestream object
+I/O Parameters :
+Output Parameters :
 
+Function Return Value:
+*/
 void Movie::read(istream &f) {
 	Media::read(f);
 	f.read(reinterpret_cast<char *>(&runtime), sizeof(runtime));
 
 }
-
+/*
+Purpose : Prompts user to for values needed to populate new object
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+Function Return Value:
+*/
 void Movie::populateProperties() {
 	Media::populateProperties();
 	cout << "Enter runtime(minutes): ";
 	this->runtime = getInput<int>();
 }
-
+/*
+Purpose : Allows users to update any propety in class
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+	int choice - placeholer for user choice
+Function Return Value:
+*/
 void Movie::updateItem() {
 	int choice;
 	int maxChoice = 7;

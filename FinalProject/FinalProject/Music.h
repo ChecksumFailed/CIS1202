@@ -36,34 +36,87 @@ Music::~Music()
 {
 }
 
-
+/*
+Purpose : gets value of the property - artist
+Input Parameters :
+I/O Parameters :
+Output Parameters :	
+Function Return Value:
+	string - artist
+*/
 string Music::getArtist() { return this->artist; }
-void Music::setArtist(string artist) { this->artist = artist; }
 
+/*
+Purpose : Sets value of the property - artist
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+	string - artist
+Function Return Value:
+*/
+void Music::setArtist(string artist) { this->artist = artist; }
+/*
+Purpose : Prints the contents of object
+Input Parameters :
+I/O Parameters : D
+Output Parameters :
+Function Return Value:
+*/
 void Music::print() {
 	Media::print();
 	cout << setw(20) << left << "Artist " << ": " << this->artist << endl;
 }
 
 //Binary file functions
+/*
+Purpose : Serializes object properties and writes to binary file
+Input Parameters :
+	ostream f- filestream object
+I/O Parameters :
+Output Parameters :
+
+Function Return Value:
+*/
 void Music::write(ostream &f) {
 	Media::write(f);
 	writeString(f, artist);
 }
 
+/*
+Purpose : Deserialized data from binary file and populates object values
+Input Parameters :
+	istream f- filestream object
+I/O Parameters :
+Output Parameters :
+
+Function Return Value:
+*/
 void Music::read(istream &f) {
 	Media::read(f);
 	artist = readString(f);
 
 }
-
+/*
+Purpose : Prompts user to for values needed to populate new object
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+Function Return Value:
+*/
 void Music::populateProperties() {
 	Media::populateProperties();
 	cout << "Enter Artist name: ";
 	this->artist = getString();
 
 }
-
+/*
+Purpose : Allows users to update any propety in class
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+	int choice - placeholer for user choice
+Function Return Value:
+*/
 void Music::updateItem() {
 	int choice;
 	int maxChoice = 7;

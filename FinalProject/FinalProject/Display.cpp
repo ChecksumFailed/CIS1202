@@ -22,15 +22,36 @@ Display::~Display()
 
 //getters
 
-
+/*
+Purpose : gets value of the property - resolution
+	Input Parameters :
+I / O Parameters :
+Output Parameters :
+Function Return Value :
+string - resolution
+*/
 string Display::getResolution() {
 	return this->resolution;
 }
-
+/*
+Purpose : gets value of the property - brand
+	Input Parameters :
+I / O Parameters :
+Output Parameters :
+Function Return Value :
+string - brand
+*/
 string Display::getBrand() {
 	return this->brand;
 }
-
+/*
+Purpose : gets value of the property - size
+	Input Parameters :
+I / O Parameters :
+Output Parameters :
+Function Return Value :
+	int -size
+*/
 int Display::getSize() {
 	return this->size;
 }
@@ -39,20 +60,50 @@ int Display::getSize() {
 
 //setters
 
+/*
+Purpose : sets value of the property - resolution
+	Input Parameters :
+I / O Parameters :
+Output Parameters :
+string - resolution
+Function Return Value :
 
+*/
 void Display::setResolution(string res) {
 	this->resolution = res;
 }
+/*
+Purpose : sets value of the property - brand
+	Input Parameters :
+I / O Parameters :
+Output Parameters :
+string - brand
+Function Return Value :
 
+*/
 void Display::setBrand(string brand) {
 	this->brand = brand;
 }
+/*
+Purpose : sets value of the property - size
+	Input Parameters :
+I / O Parameters :
+Output Parameters :
+int - size
+Function Return Value :
 
+*/
 void Display::setSize(int size) {
 	this->size = size;
 }
 
-
+/*
+Purpose : Prints the contents of object
+Input Parameters :
+I/O Parameters : D
+Output Parameters :
+Function Return Value:
+*/
 void Display::print() {
 	/*
 		int size;
@@ -66,6 +117,15 @@ void Display::print() {
 }
 
 //Serialize/Deserialize
+/*
+Purpose : Serializes object properties and writes to binary file
+Input Parameters :
+	ostream f- filestream object
+I/O Parameters :
+Output Parameters :
+
+Function Return Value:
+*/
 void Display::write(ostream &f) {
 	Inventory::write(f);
 	f.write(reinterpret_cast<char *>(&size), sizeof(size));
@@ -74,7 +134,15 @@ void Display::write(ostream &f) {
 	//f.write(reinterpret_cast<char *>(&brand), sizeof(brand));
 	writeString(f, brand);
 }
+/*
+Purpose : Deserialized data from binary file and populates object values
+Input Parameters :
+	istream f- filestream object
+I/O Parameters :
+Output Parameters :
 
+Function Return Value:
+*/
 void Display::read(istream &f) {
 	Inventory::read(f);
 	f.read(reinterpret_cast<char *>(&size), sizeof(size));
@@ -85,7 +153,13 @@ void Display::read(istream &f) {
 
 }
 
-
+/*
+Purpose : Prompts user to for values needed to populate new object
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+Function Return Value:
+*/
 void Display::populateProperties() {
 	Inventory::populateProperties();
 	cout << "Enter size of display(inches): ";
@@ -97,7 +171,14 @@ void Display::populateProperties() {
 
 }
 
-
+/*
+Purpose : Allows users to update any propety in class
+Input Parameters :
+I/O Parameters :
+Output Parameters :
+	int choice - placeholer for user choice
+Function Return Value:
+*/
 void Display::updateItem() {
 	int choice;
 	int maxChoice = 7;
@@ -122,7 +203,7 @@ void Display::updateItem() {
 			break;
 		case 3:
 			cout << "Enter new purchase price: ";
-			this->setYearPurchased(getInput<double>());
+			this->setPurchasePrice(getInput<double>());
 			break;
 		case 4:
 			cout << "Enter new resolution: ";
