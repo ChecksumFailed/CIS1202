@@ -96,3 +96,48 @@ void Display::populateProperties() {
 	this->brand = getString();
 
 }
+
+
+void Display::updateItem() {
+	int choice;
+	int maxChoice = 7;
+	do {
+		cout << "1 - Name(" << this->getName() << ")\n";
+		cout << "2 - Purchase Year(" << this->getYearPurchased() << ")\n";
+		cout << "3 - Purchase Price(" << this->getPurchasePrice() << ")\n";
+		cout << "4 - Resolution(" << this->getResolution() << ")\n";
+		cout << "5 - Brand(" << this->getBrand() << ")\n";
+		cout << "6 - Size(" << this->getSize() << ")\n";
+		cout << maxChoice << " - Exit\n";
+		cout << "Enter Choice: ";
+		choice = getInput<int>(1, maxChoice);
+		switch (choice) {
+		case 1:
+			cout << "Enter new name: ";
+			this->setName(getString());
+			break;
+		case 2:
+			cout << "Enter new purchase year: ";
+			this->setYearPurchased(getInput<int>());
+			break;
+		case 3:
+			cout << "Enter new purchase price: ";
+			this->setYearPurchased(getInput<double>());
+			break;
+		case 4:
+			cout << "Enter new resolution: ";
+			this->setResolution(getString());
+			break;
+		case 5:
+			cout << "Enter new brand:  ";
+			this->setBrand(getString());
+			break;
+		case 6:
+			cout << "Enter new Size(inches): ";
+			this->setYearPurchased(getInput<int>());
+			break;
+
+		}
+
+	} while (choice != maxChoice);
+}

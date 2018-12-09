@@ -17,10 +17,10 @@ class Inventory
 private: 
 	
 	std::string name; //name or descriptor of item
-	double purchasePrice; //purchase price of item
+	double purchasePrice = 0.0; //purchase price of item
 	
-	double depreciatedPrice; 
-	int yearPurchased; //year item purchased
+	double depreciatedPrice = 0.00; 
+	int yearPurchased = 1970; //year item purchased
 	//Assum 20% rate and 5 years of value. Calculates straight line depreciation for simplicity
 	int depreciationYears = 5; //number of years in life of item.
 	double depreciationRate = 0.2;
@@ -39,6 +39,8 @@ public:
 	int getYearPurchased();
 	int getDepreciationYears();
 	double getDepreciatedPrice();
+	string getIType();
+	virtual void updateItem();
 
 	//setters
 	void setName(std::string);
@@ -63,6 +65,8 @@ public:
 	 template <class T> static T getInput(T, T);//gets and validates input,checks against range
 	virtual void populateProperties(); //prompts user and validates input.
 	static string getString(); //Gets and validates string input
+	
+	
 
 };
 

@@ -5,6 +5,8 @@
 #include <vector>
 #include <fstream>
 #include <map>
+#include <regex>
+#include <algorithm>
 //Custom Class for inventory program
 #include "Inventory.h"
 #include "Media.h"
@@ -36,6 +38,11 @@ void saveInv(vector<Inventory *> &, string);
 void printInv(const vector<Inventory *> &);
 void printSummary(const vector<Inventory *> &);
 template <class T> T sumMap(map<string,T>); //sums up values in map
+void search(vector<Inventory *> &,string); //searches vector by name
+template <class T> int itemMenu(T &); //display menu for search result
+void sortInv(vector<Inventory *> &);
+
+
 
 
 
@@ -43,11 +50,17 @@ template <class T> T sumMap(map<string,T>); //sums up values in map
 int main() {
 	vector<Inventory *> inventoryDB; //Inventory Vector to hold pointers to derived classes.
 	int choice;
- 	loadDB(inventoryDB, "inventory.dat");
+	try {
+		loadDB(inventoryDB, "inventory.dat");
+	}
+	catch (exception e) {
+		cout << "ERROR reading data from file.  Please fix error or delete file\n";
+		exit(EXIT_FAILURE);
+	}
 	
 	do {
 		displayMainMenu();
-		choice = Inventory::getInput<int>(1, 5);
+		choice = Inventory::getInput<int>(1, 6);
 		switch (choice)
 		{
 		case 1:
@@ -57,15 +70,20 @@ int main() {
 			printSummary(inventoryDB);
 			break;
 		case 3:
+			cout << "Enter name to search for: ";
+			search(inventoryDB, Inventory::getString());
 			break;
 		case 4:
 			addItem(inventoryDB);
+			break;
+		case 5:
+			sortInv(inventoryDB);
 			break;
 		
 		}
 	
 
-	} while ( choice != 5);
+	} while ( choice != 6);
 
 	
 	saveInv(inventoryDB, "inventory.dat");
@@ -82,11 +100,63 @@ void displayMainMenu() {
 	cout << "2 - Print Inventory Summary(Count/Cost/Depreciation)\n";
 	cout << "3 - Search/Update/Delete Item\n";
 	cout << "4 - Add inventory item\n";
-	cout << "5 - Quit\n";
+	cout << "5 - Sort inventory\n";
+	cout << "6 - Quit\n";
 	cout << "Please enter choice: ";
 
 }
 
+void sortInv(vector<Inventory *> &inv) {
+	cout << "\nSort Menu\n";
+	cout << "1 - Sort by Name(ASC)\n";
+	cout << "2 - Sort by Name(Desc)\n";
+	cout << "3 - Sort by Purchase Year(ASC)\n";
+	cout << "4 - Sort by Purchase Year(DESC)\n";
+	cout << "5 - Sort by Purchase Price(ASC)\n";
+	cout << "6 - Sort by Purchase Price(DESC)\n";
+	cout << "7 - Exit\n";
+	cout << "Please enter choice: ";
+	int choice = Inventory::getInput<int>(1, 7);
+
+	switch (choice) {
+	case 1:
+		sort(inv.begin(), inv.end(), [](Inventory *a, Inventory *b) {
+			if (a->getName().compare(b->getName()) < 0)
+				return true;
+			else
+				return false;
+		});
+		break;
+	case 2:
+		sort(inv.begin(), inv.end(), [](Inventory *a, Inventory *b) {
+			if (a->getName().compare(b->getName()) > 0)
+				return true;
+			else
+				return false;
+		});
+		break;
+	case 3:
+		sort(inv.begin(), inv.end(), [](Inventory *a, Inventory *b) {
+			return a->getYearPurchased() < b->getYearPurchased();
+		});
+		break;
+	case 4:
+		sort(inv.begin(), inv.end(), [](Inventory *a, Inventory *b) {
+			return a->getYearPurchased() > b->getYearPurchased();
+		});
+	case 5:
+		sort(inv.begin(), inv.end(), [](Inventory *a, Inventory *b) {
+			return a->getPurchasePrice() < b->getPurchasePrice();
+		});
+		break;
+	case 6:
+		sort(inv.begin(), inv.end(), [](Inventory *a, Inventory *b) {
+			return a->getPurchasePrice() > b->getPurchasePrice();
+		});
+		break;
+	}
+
+}
 
 void addItem(vector<Inventory *> &inv) {
 	
@@ -248,5 +318,70 @@ template <class T> T sumMap(map<string, T> m) {
 	}
 	return sumVar;
 }
+
+
+void search(vector<Inventory *> &inv, string searchString) {
+	vector<Inventory *> results; //temporary vector to hold search results
+	regex strRegEx(".*" + searchString + ".*", regex_constants::icase | regex_constants::ECMAScript); //Regex pattern to validate input
+	int choice = -1;
+	int curSize; //current size of result set
+	for (Inventory *i : inv) {
+		if (regex_match(i->getName(), strRegEx))
+			results.push_back(i);
+	}
+	do {
+		curSize = results.size();
+		int counter = 0;
+		for (Inventory *i : results) {
+			cout << counter << " - " << i->getName() << endl;
+		}
+		if (results.size() == 0) {
+			cout << "No match found\n";
+			return;
+		}
+		cout << results.size()  << " - Exit\n";
+		cout << "Enter number of item to modify or " << results.size()  << " to exit: ";
+		choice = Inventory::getInput<int>(0, results.size() );
+		if (choice == results.size())
+			return;
+
+		//Take action on search result
+		int action = itemMenu(results[choice]);
+		switch (action) {
+		case 1:
+			results[choice]->print();
+			break;
+		case 3:
+			results[choice]->updateItem();
+			break;
+		case 2:
+			std::vector<Inventory *>::iterator position = find(inv.begin(), inv.end(), results[choice]);
+			if (position != inv.end()) // == myVector.end() means the element was not found
+				inv.erase(position); //remove from main vector
+			delete results[choice]; //deallocate pointer
+			results.erase(results.begin() + choice); //remove from search results
+			break;
+	
+		}
+	} while (choice != curSize);
+
+	
+}
+template <class T>
+int itemMenu(T &item) {
+	
+	
+	cout << item->getName() << " Menu" << endl;
+	cout << "1 - Print\n";
+	cout << "2 - Delete\n";
+	cout << "3 - Update\n";
+	cout << "4 - Exit\n";
+	cout << "Enter choice: ";
+	return Inventory::getInput<int>(1, 4);
+	
+
+}
+
+
 
 

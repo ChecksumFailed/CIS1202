@@ -72,8 +72,47 @@ void Media::populateProperties() {
 	cout << "Enter release year: ";
 	this->year = getInput<int>();
 	cout << "Enter rating(1.0-10.0): ";
-	this->rating = getInput<double>(1.0, 10.0);
+	this->rating = getInput<float>(1.0, 10.0);
 	cout << "Enter media type(cd/dvd/bluray/digital...): ";
 	this->mediaType = getString();
 
+}
+
+void Media::updateItem() {
+	int choice;
+	int maxChoice = 6;
+	do {
+		cout << "1 - Name(" << this->getName() << ")\n";
+		cout << "2 - Purchase Year(" << this->getYearPurchased() << ")\n";
+		cout << "3 - Purchase Price(" << this->getPurchasePrice() << ")\n";
+		cout << "4 - Genre(" << this->getGenre() << ")\n";
+		cout << "5 - Rating(" << this->getRating() << ")\n";
+		cout << maxChoice << " - Exit\n";
+		cout << "Enter Choice: ";
+		choice = getInput<int>(1, maxChoice);
+		switch (choice) {
+		case 1:
+			cout << "Enter new name: ";
+			this->setName(getString());
+			break;
+		case 2:
+			cout << "Enter new purchase year: ";
+			this->setYearPurchased(getInput<int>());
+			break;
+		case 3:
+			cout << "Enter new purchase price: ";
+			this->setYearPurchased(getInput<double>());
+			break;
+		case 4:
+			cout << "Enter new genre: ";
+			this->setGenre(getString());
+			break;
+		case 5:
+			cout << "Enter new rating:  ";
+			this->setRating(getInput<float>(1.0,10.0));
+			break;
+
+		}
+
+	} while (choice != maxChoice);
 }

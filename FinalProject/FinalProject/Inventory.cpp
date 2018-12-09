@@ -29,6 +29,9 @@ double Inventory::getPurchasePrice(){
 	return this->purchasePrice;
 }
 
+string Inventory::getIType() {
+	return this->iType;
+}
 
 int Inventory::getYearPurchased(){
 	return this->yearPurchased;
@@ -57,6 +60,7 @@ void Inventory::setYearPurchased(int year){
 void Inventory::setDepreciationYears(int years){
 	this->depreciationYears = years;
 }
+
 
 
 
@@ -187,4 +191,51 @@ void Inventory::populateProperties() {
 	cout << "Enter purchase price: ";
 	this->purchasePrice = getInput<double>();
 	calculateDepreciation();
+}
+
+void Inventory::updateItem() {
+	int choice;
+	do {
+		cout << "1 - Name(" << this->getName() << ")\n";
+		cout << "2 - Purchase Year(" << this->getYearPurchased() << ")\n";
+		cout << "3 - Purchase Price(" << this->getPurchasePrice() << ")\n";
+		cout << "4 - Exit\n";
+		choice = getInput<int>(1, 4);
+		switch (choice) {
+		case 1:
+			cout << "Enter new name: ";
+			this->setName(getString());
+			break;
+		case 2:
+			cout << "Enter new purchase year: ";
+			this->setYearPurchased(getInput<int>());
+			break;
+		case 3:
+			cout << "Enter new purchase price: ";
+			this->setPurchasePrice(getInput<double>());
+			break;
+
+		}
+
+	} while (choice != 4);
+}
+
+//Comparators
+
+//Overload < operator for sort. Sort by name by default.
+bool operator<(Inventory a, Inventory b)
+{
+
+	if (a.getName().compare(b.getName()) < 0)
+		return true;
+	return false;
+}
+
+//Overload > operator for sort. Sort by name by default.
+bool operator>(Inventory a, Inventory b)
+{
+
+	if (a.getName().compare(b.getName()) > 0)
+		return true;
+	return false;
 }

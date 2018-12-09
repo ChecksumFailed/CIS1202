@@ -34,5 +34,6 @@ public:
 	virtual void read(istream &f);
 
 	virtual void populateProperties(); //Propmpts user for input and populates properties.
+	virtual void updateItem();
 };
 #endif // !DISPLAY_H

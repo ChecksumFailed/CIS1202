@@ -35,6 +35,7 @@ public:
 	virtual void read(istream &f); //deserializes data nd writes to fiel
 
 	virtual void populateProperties(); //Propmpts user for input and populates properties.
+	virtual void updateItem();
 };
 
 #endif // !MEDIA_H

@@ -17,7 +17,10 @@ public:
 	////Seriallize/Deserialize
 	virtual void write(ostream &f);
 	virtual void read(istream &f);
+	
+	//input/update
 	virtual void populateProperties(); //Propmpts user for input and populates properties.
+	virtual void updateItem();
 
 };
 
@@ -59,4 +62,48 @@ void Music::populateProperties() {
 	cout << "Enter Artist name: ";
 	this->artist = getString();
 
+}
+
+void Music::updateItem() {
+	int choice;
+	int maxChoice = 7;
+	do {
+		cout << "1 - Name(" << this->getName() << ")\n";
+		cout << "2 - Purchase Year(" << this->getYearPurchased() << ")\n";
+		cout << "3 - Purchase Price(" << this->getPurchasePrice() << ")\n";
+		cout << "4 - Genre(" << this->getGenre() << ")\n";
+		cout << "5 - Rating(" << this->getRating() << ")\n";
+		cout << "6 - Artist(" << this->getArtist() << ")\n";
+		cout << maxChoice << " - Exit\n";
+		cout << "Enter Choice: ";
+		choice = getInput<int>(1, maxChoice);
+		switch (choice) {
+		case 1:
+			cout << "Enter new name: ";
+			this->setName(getString());
+			break;
+		case 2:
+			cout << "Enter new purchase year: ";
+			this->setYearPurchased(getInput<int>());
+			break;
+		case 3:
+			cout << "Enter new purchase price: ";
+			this->setPurchasePrice(getInput<double>());
+			break;
+		case 4:
+			cout << "Enter new genre: ";
+			this->setGenre(getString());
+			break;
+		case 5:
+			cout << "Enter new rating:  ";
+			this->setRating(getInput<float>(1.0, 10.0));
+			break;
+		case 6:
+			cout << "Enter new artist: ";
+			this->setArtist(getString());
+			break;
+
+		}
+
+	} while (choice != maxChoice);
 }
