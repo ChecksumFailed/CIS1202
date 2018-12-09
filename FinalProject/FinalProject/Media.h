@@ -31,8 +31,10 @@ public:
 	virtual void print();
 
 	//Binary file functions
-	virtual void write(ostream &f);
-	virtual void read(istream &f);
+	virtual void write(ostream &f); //seriallizes data and writes to file
+	virtual void read(istream &f); //deserializes data nd writes to fiel
+
+	virtual void populateProperties(); //Propmpts user for input and populates properties.
 };
 
 #endif // !MEDIA_H

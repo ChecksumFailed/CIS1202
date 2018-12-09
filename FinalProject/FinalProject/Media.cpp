@@ -64,3 +64,16 @@ void Media::read(istream &f) {
 	mediaType = readString(f);
 
 }
+
+void Media::populateProperties() {
+	Inventory::populateProperties();
+	cout << "Enter genre: ";
+	this->genre = getString();
+	cout << "Enter release year: ";
+	this->year = getInput<int>();
+	cout << "Enter rating(1.0-10.0): ";
+	this->rating = getInput<double>(1.0, 10.0);
+	cout << "Enter media type(cd/dvd/bluray/digital...): ";
+	this->mediaType = getString();
+
+}

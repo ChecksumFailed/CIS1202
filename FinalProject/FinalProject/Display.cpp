@@ -4,6 +4,7 @@
 
 Display::Display()
 {
+	iType = "Display";
 }
 
 Display::Display(string name, double price, int yearPurchased, int size, string res, string brand):Inventory(name,price,yearPurchased) {
@@ -15,7 +16,7 @@ Display::Display(string name, double price, int yearPurchased, int size, string 
 }
 Display::~Display()
 {
-	iType = "Display";
+	
 }
 
 
@@ -81,5 +82,17 @@ void Display::read(istream &f) {
 	//f.read(reinterpret_cast<char *>(&brand), sizeof(brand));
 	resolution = readString(f);
 	brand = readString(f);
+
+}
+
+
+void Display::populateProperties() {
+	Inventory::populateProperties();
+	cout << "Enter size of display(inches): ";
+	this->size = getInput<int>();
+	cout << "Enter resolution(1080p,4k...): ";
+	this->resolution = getString();
+	cout << "Enter brand/manufacturer: ";
+	this->brand = getString();
 
 }

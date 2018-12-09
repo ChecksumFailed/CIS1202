@@ -15,6 +15,7 @@ public:
 	////Seriallize/Deserialize
 	virtual void write(ostream &f);
 	virtual void read(istream &f);
+	virtual void populateProperties(); //Propmpts user for input and populates properties.
 };
 
 #endif
@@ -31,7 +32,7 @@ Movie::~Movie()
 
 void Movie::print() {
 	Media::print();
-	cout << setw(20) << left << "Runtime(Minutes) " << ": " << endl;
+	cout << setw(20) << left << "Runtime(Minutes) " << ": " << this->runtime << endl;
 }
 
 //Binary file functions
@@ -44,4 +45,10 @@ void Movie::read(istream &f) {
 	Media::read(f);
 	f.read(reinterpret_cast<char *>(&runtime), sizeof(runtime));
 
+}
+
+void Movie::populateProperties() {
+	Media::populateProperties();
+	cout << "Enter runtime(minutes): ";
+	this->runtime = getInput<int>();
 }

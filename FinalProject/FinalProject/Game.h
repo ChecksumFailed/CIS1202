@@ -20,6 +20,7 @@ public:
 	////Seriallize/Deserialize
 	virtual void write(ostream &f);
 	virtual void read(istream &f);
+	virtual void populateProperties(); //Propmpts user for input and populates properties.
 };
 #endif // !GAME_H
 
@@ -54,4 +55,10 @@ void Game::read(istream &f) {
 	platform = readString(f);
 
 
+}
+
+void Game::populateProperties(){
+	Media::populateProperties();
+	cout << "Enter platform(Xbox,pc,etc): ";
+	this->platform = getString();
 }

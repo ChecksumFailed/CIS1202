@@ -37,6 +37,9 @@ int Inventory::getDepreciationYears(){
 	return this->depreciationYears;
 }
 
+double Inventory::getDepreciatedPrice() {
+	return this->depreciatedPrice;
+}
 //setters
 void Inventory::setName(string name){
 	this->name = name;
@@ -140,4 +143,48 @@ void Inventory::writeString(ostream &f, string &s) {
 	size_t stringSize = s.size();
 	f.write(reinterpret_cast<char *>(&stringSize), sizeof(size_t));
 	f.write(s.c_str(), stringSize * sizeof(char));
+}
+
+
+
+
+
+
+/*
+Purpose : Gets string input and validates
+	Input Parameters : n / a
+	I / O Parameters : n / a
+	Output Parameters :
+bool isValid - Used to control loop until valid input is entered
+Function Return Value :
+string strHold - holds input from cin
+*/
+string  Inventory::getString() {
+	cin.clear();
+	string strHolder; //temporary variable for getlne
+	bool isValid = false;
+
+	do {
+		getline(cin, strHolder);
+		if (cin.fail()) {
+			cout << "\nYou have entered invalid input.  Try Again\n";
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+		else
+			isValid = true;
+	} while (!isValid);
+
+	return strHolder;
+
+}
+
+void Inventory::populateProperties() {
+	cout << "Enter name of item: ";
+	this->name = getString();
+	cout << "Enter year purchased: ";
+	this->yearPurchased = getInput<int>();
+	cout << "Enter purchase price: ";
+	this->purchasePrice = getInput<double>();
+	calculateDepreciation();
 }

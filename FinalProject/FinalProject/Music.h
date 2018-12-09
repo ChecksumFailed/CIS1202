@@ -17,6 +17,7 @@ public:
 	////Seriallize/Deserialize
 	virtual void write(ostream &f);
 	virtual void read(istream &f);
+	virtual void populateProperties(); //Propmpts user for input and populates properties.
 
 };
 
@@ -50,5 +51,12 @@ void Music::write(ostream &f) {
 void Music::read(istream &f) {
 	Media::read(f);
 	artist = readString(f);
+
+}
+
+void Music::populateProperties() {
+	Media::populateProperties();
+	cout << "Enter Artist name: ";
+	this->artist = getString();
 
 }

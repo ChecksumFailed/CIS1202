@@ -4,6 +4,7 @@
 #include <cmath>
 #include <vector>
 #include <fstream>
+#include <map>
 //Custom Class for inventory program
 #include "Inventory.h"
 #include "Media.h"
@@ -27,163 +28,108 @@ write:  just call the write function of the object. Which will call any parent f
 */
 
 void displayMainMenu(); //Main Menu of program
-template <class T> T getInput(); //gets and validates input
-template <class T> T getInput(T,T);//gets and validates input,checks against range
+
 void addItem(vector<Inventory *> &);
 void test(vector<Inventory *> &);
 void loadDB(vector<Inventory *> &, string);
 void saveInv(vector<Inventory *> &, string);
 void printInv(const vector<Inventory *> &);
+void printSummary(const vector<Inventory *> &);
+template <class T> T sumMap(map<string,T>); //sums up values in map
+
+
 
 
 int main() {
 	vector<Inventory *> inventoryDB; //Inventory Vector to hold pointers to derived classes.
-	/*do {
+	int choice;
+ 	loadDB(inventoryDB, "inventory.dat");
+	
+	do {
 		displayMainMenu();
+		choice = Inventory::getInput<int>(1, 5);
+		switch (choice)
+		{
+		case 1:
+			printInv(inventoryDB);
+			break;
+		case 2:
+			printSummary(inventoryDB);
+			break;
+		case 3:
+			break;
+		case 4:
+			addItem(inventoryDB);
+			break;
 		
-	} while (getInput(1, 5) != 5);
+		}
+	
 
-	*/
-
+	} while ( choice != 5);
 
 	
-	test(inventoryDB);
-	//printInv(inventoryDB);
-
- 	
-	//loadDB(inventoryDB, "test.dat");
-	printInv(inventoryDB);
-
-	saveInv(inventoryDB, "test.dat");
+	saveInv(inventoryDB, "inventory.dat");
+	
 	cout << "Press any key to exit";
 	getchar();
 
 	return EXIT_SUCCESS;
 }
 
-void test(vector<Inventory *> &inv) {
-	Inventory *i = new Inventory;
-	i->setName("Gold Ring");
-	i->setPurchasePrice(9.99);
-	i->setYearPurchased(1999);
-	
-	i->calculateDepreciation();
-	//i->print();
-	inv.push_back(i);
-
-	Movie *m = new Movie;
-	m->setName("Horror Movie");
-	m->setPurchasePrice(5.99);
-	m->setYearPurchased(2010);
-	m->calculateDepreciation();
-	m->setGenre("Horror");
-	m->setMediaType("Digital");
-	m->setYear(2009);
-	m->setRating(3.3);
-	//i->print();
-	inv.push_back(m);
-
-	Display *d = new Display;
-	d->setName("My TV");
-	d->setPurchasePrice(1999.99);
-	d->setYearPurchased(2018);
-	d->calculateDepreciation();
-	d->setBrand("Samsung");
-	d->setResolution("4k");
-	d->setSize(75);
-	
-	//i->print();
-	inv.push_back(d);
-}
-
 void displayMainMenu() {
-	cout << "CIS 1202 Home Inventory Database\n\n";
+	cout << "\nCIS 1202 Home Inventory Database\n\n";
 	cout << "1 - Print Inventory\n";
 	cout << "2 - Print Inventory Summary(Count/Cost/Depreciation)\n";
 	cout << "3 - Search/Update/Delete Item\n";
 	cout << "4 - Add inventory item\n";
 	cout << "5 - Quit\n";
 	cout << "Please enter choice: ";
-	
-
-
-
-}
-
-/*
-Purpose : Gets  input and validates
-Input Parameters : n/a
-I/O Parameters : n/a
-Output Parameters : n/a
-Function Return Value:
-	T tmpHolder - placeholder to validate input against
-*/
-template <typename T>
-T getInput() {
-	cin.clear();
-	T tmpHolder; //stores user choice
-	
-	bool isValid = false;
-
-	do {
-		cin >> tmpHolder;
-		if (cin.fail()) {
-			cout << "\nYou have entered invalid input.  Try Again\n";
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-		else
-			isValid = true;
-	} while (!isValid);
-	cin.clear();
-	cin.ignore();
-	return tmpHolder;
-}
-
-/*
-Purpose : Gets  input and validates against range
-Input Parameters : n/a
-I/O Parameters : n/a
-Output Parameters : n/a
-Function Return Value:
-	T tmpHolder - placeholder to validate input against
-*/
-template <class T>
-T getInput(T low, T high) {
-	cin.clear();
-	T tmpHolder; //temporary variable for getlne
-	bool isValid = false;
-
-	do {
-		cin >> tmpHolder;
-		if (cin.fail() || tmpHolder < low || tmpHolder > high) {
-			cout << "\nYou have entered invalid input.  Try Again:";
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-		}
-		else
-			isValid = true;
-	} while (!isValid);
-	cin.clear();
-	cin.ignore();
-	return tmpHolder;
 
 }
 
 
 void addItem(vector<Inventory *> &inv) {
-
-	//const string INVENTORY_TYPES[] = { "Display","Game","Movie","Music","Misc" };
+	
 	cout << "1 - Display\n"
-		<< "2 - Game\n"
-		<< "3 - Movie\n"
-		<< "4 - Music\n"
-		<< "5 - Misc Item\n"
-		<< "6 - Exit\n"
-		<< "Choose and item: ";
-	int choice = getInput(1, 6);
+		"2 - Movie\n"
+		"3 - Music\n"
+		"4 - Game\n"
+		"5 - Misc\n"
+		"6 - Exit\n";
+	cout << "Select the type of item to add or 6 to exit: ";
+
+	int choice = Inventory::getInput<int>(1, 6);
+	if (choice == 6)
+		return;
+	
+
+	//Create new object based on choice
+	switch (choice) {
+	case 1:
+		inv.push_back(new Display);
+		break;
+	case 2:
+		inv.push_back(new Movie);
+		break;
+	case 3:
+		inv.push_back(new Music);
+		break;
+	case 4:
+		inv.push_back(new Game);
+		break;
+	case 5:
+		inv.push_back(new Inventory);
+		break;
+	}
+
+	inv.back()->populateProperties();
+	
+
+
+
 }
+
+
 
 void loadDB(vector<Inventory *> &inv,string fileName) {
 	fstream file;
@@ -214,9 +160,14 @@ void loadDB(vector<Inventory *> &inv,string fileName) {
 		else if (tmpRead == "Game")
 			inv.push_back(new Game);
 		
-		
-		inv[counter]->read(file);
-		counter++;
+		if (inv[counter]) {
+			inv[counter]->read(file);
+			counter++;
+		}
+		if (file.eof() || !file.good()) {
+			file.close();
+			return;
+		}
 		tmpRead = "";
 		tmpRead = Inventory::readString(file);
 		
@@ -225,6 +176,7 @@ void loadDB(vector<Inventory *> &inv,string fileName) {
 		//file.seekg(sizeof(tmpProduct) * counter, ios::beg);
 	}
 
+	file.close();
 
 }
 
@@ -256,3 +208,45 @@ void printInv(const vector<Inventory *> &inv) {
 		a->print();
 	}
 }
+
+void printSummary(const vector<Inventory *> &inv) {
+	int totalItem = 0;
+	map<string, int> countMap;
+	map<string, double> costMap;
+	map<string, double> valueMap;
+
+	for (Inventory *i : inv) {
+		countMap[i->iType] ++;
+		costMap[i->iType] += i->getPurchasePrice();
+		valueMap[i->iType] += i->getDepreciatedPrice();
+	}
+	cout << endl;
+	cout << setw(10) << "Type" << setw(10) << "Count" << setw(15) << "Total Cost" << setw(15) << "Total Value" << endl;
+
+	map<string, int>::iterator it = countMap.begin();
+	map<string, double>::iterator it2 = costMap.begin();
+	map<string, double>::iterator it3 = valueMap.begin();
+	while (it != countMap.end())
+	{
+		cout << setw(10) << it->first << setw(10) << it->second << setw(15) << it2->second << setw(15) << it3->second << endl;
+		it++;
+		it2++;
+		it3++;
+	}
+	cout << setw(10) << "TOTAL: " << setw(10) << sumMap(countMap) << setw(15) << sumMap(costMap) << setw(15) << sumMap(valueMap) << endl;
+
+}
+
+template <class T> T sumMap(map<string, T> m) {
+	T sumVar = 0;
+	typename map<string, T>::iterator it = m.begin();
+	while (it != m.end())
+	{
+		sumVar += it->second;
+		it++;
+
+	}
+	return sumVar;
+}
+
+
