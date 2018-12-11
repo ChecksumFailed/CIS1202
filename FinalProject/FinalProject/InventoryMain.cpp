@@ -52,6 +52,8 @@ int main() {
 	}
 	catch (exception e) {
 		cout << "ERROR reading data from file.  Please fix error or delete file\n";
+		cout << "Press any key to exit";
+		getchar();
 		exit(EXIT_FAILURE);
 	}
 	
